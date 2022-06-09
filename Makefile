@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/06/08 19:11:04 by seozcan          ###   ########.fr        #
+#    Updated: 2022/06/09 17:10:02 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -191,32 +191,31 @@ push:	header fclean
 	@echo "$(GREEN)git push:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 clean:	header
-ifneq ($(wildcard ./$(ODIR)),)
-	@make -C $(LDIR) --quiet clean	
-	@make -C $(PFDIR) --quiet clean
-	@make -C $(MDIR) --quiet clean
+ifeq ($(wildcard ./$(ODIR)),)
 	@rm -rf $(ODIR)
 	@rm -rf $(BODIR)
 	@echo "$(ORANGE)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
 else
-	@make -C $(LDIR) --quiet clean
-	@make -C $(PFDIR) --quiet clean
-	@make -C $(MDIR) --quiet clean
 	@rm -f $(wildcard *.o)
 	@rm -f $(wildcard *.d)
 	@echo "$(ORANGE)obj files:\t\t\t\t\t\t[RM]$(NO_COLOR)"
 endif
 
 fclean:	header clean
+	@rm -f $(NAME)
+	@rm -f $(BNAME)
+	@echo "$(ORANGE)$(NAME) executable:\t\t\t\t\t\t[RM]$(NO_COLOR)"
+
+fcleanlib:	header fclean
 ifeq ($(IS_LIBFT),true)
 	@make -C $(LDIR) --quiet fclean
 endif
 ifeq ($(IS_PRINTF),true)
 	@make -C $(PFDIR) --quiet fclean
 endif
-	@rm -f $(NAME)
-	@rm -f $(BNAME)
-	@echo "$(ORANGE)$(NAME) executable:\t\t\t\t\t\t[RM]$(NO_COLOR)"
+ifeq ($(IS_MINILIBX),true)
+	@make -C $(MDIR) --quiet clean
+endif
 
 header:
 	@echo "$(BPURPLE)"

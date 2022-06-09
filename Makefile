@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/06/09 17:10:02 by seozcan          ###   ########.fr        #
+#    Updated: 2022/06/09 18:54:44 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,19 +14,23 @@
 
 NAME	:= philo
 
-BNAME	:= 
+BNAME	:= philo_bonus
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::PATHS::
 
-ODIR	:= objs
+PATH 	:= philo
 
-BODIR	:= objs_bonus
+BPATH	:= philo_bonus
 
-SDIR	:= srcs
+ODIR	:= $(addprefix $(PATH)/, objs)
 
-BDIR	:= bonus
+BODIR	:= $(addprefix $(BPATH)/, objs)
 
-IDIR	:= inc
+SDIR	:= $(addprefix $(PATH)/, srcs)
+
+BDIR	:= $(addprefix $(BPATH)/, srcs)
+
+IDIR	:= $(addprefix $(PATH)/, inc)
 
 LDIR 	:= libft
 
@@ -36,7 +40,7 @@ MDIR	:= minilibx-linux
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCES::
 
-SRCS	:= 
+SRCS	:= philo_main.c 
 
 OBJS	= $(addprefix $(ODIR)/, $(SRCS:.c=.o))
 
@@ -55,6 +59,8 @@ WFLAGS	:= -MMD -Wall -Wextra -Werror
 GFLAG	:= -g3
 
 SANFLAG	:= -fsanitize=address
+
+THREADS := -pthread
 
 AR		:= ar
 
@@ -141,7 +147,7 @@ $(ODIR)/%.o:	%.c
 
 $(NAME):		$(OBJS)	
 	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(OBJS) -o $(NAME)
-	@echo "$(GREEN)mandatory exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(OBJS):		| $(ODIR)
 
@@ -191,7 +197,7 @@ push:	header fclean
 	@echo "$(GREEN)git push:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 clean:	header
-ifeq ($(wildcard ./$(ODIR)),)
+ifneq ($(wildcard ./$(ODIR)),)
 	@rm -rf $(ODIR)
 	@rm -rf $(BODIR)
 	@echo "$(ORANGE)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
@@ -204,7 +210,7 @@ endif
 fclean:	header clean
 	@rm -f $(NAME)
 	@rm -f $(BNAME)
-	@echo "$(ORANGE)$(NAME) executable:\t\t\t\t\t\t[RM]$(NO_COLOR)"
+	@echo "$(ORANGE)$(NAME) executable:\t\t\t\t\t[RM]$(NO_COLOR)"
 
 fcleanlib:	header fclean
 ifeq ($(IS_LIBFT),true)

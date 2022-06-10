@@ -6,75 +6,75 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/06/09 18:54:44 by seozcan          ###   ########.fr        #
+#    Updated: 2022/06/10 17:43:23 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::TARGET::
-
-NAME	:= philo
-
-BNAME	:= philo_bonus
-
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::PATHS::
 
-PATH 	:= philo
+APATH		 	:= philo
 
-BPATH	:= philo_bonus
+BPATH			:= philo_bonus
 
-ODIR	:= $(addprefix $(PATH)/, objs)
+ODIR			:= $(addprefix $(APATH)/, objs)
 
-BODIR	:= $(addprefix $(BPATH)/, objs)
+BODIR			:= $(addprefix $(BPATH)/, objs)
 
-SDIR	:= $(addprefix $(PATH)/, srcs)
+SDIR			:= $(addprefix $(APATH)/, srcs)
 
-BDIR	:= $(addprefix $(BPATH)/, srcs)
+BDIR			:= $(addprefix $(BPATH)/, srcs)
 
-IDIR	:= $(addprefix $(PATH)/, inc)
+IDIR			:= $(addprefix $(APATH)/, inc)
 
-LDIR 	:= libft
+LDIR 			:= libft
 
-PFDIR	:= ft_printf
+PFDIR			:= ft_printf
 
-MDIR	:= minilibx-linux
+MDIR			:= minilibx-linux
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::TARGET::
+
+NAME			:= $(addprefix $(APATH)/, philo)
+
+BNAME			:= $(addprefix $(BPATH)/, philo_bonus)
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCES::
 
-SRCS	:= philo_main.c 
+SRCS			:= philo_main.c philo_init.c philo_utils.c 
 
-OBJS	= $(addprefix $(ODIR)/, $(SRCS:.c=.o))
+OBJS			= $(addprefix $(ODIR)/, $(SRCS:.c=.o))
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::
 
-BSRCS	:= 
+BSRCS			:= 
 
-BOBJS	= $(addprefix $(BODIR)/,$(BSRCS:.c=.o))
+BOBJS			= $(addprefix $(BODIR)/,$(BSRCS:.c=.o))
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COMPILERS::
 
-CC		:= gcc
+CC				:= gcc
 
-WFLAGS	:= -MMD -Wall -Wextra -Werror
+WFLAGS			:= -MMD -Wall -Wextra -Werror
 
-GFLAG	:= -g3
+GFLAG			:= -g3
 
-SANFLAG	:= -fsanitize=address
+SANFLAG			:= -fsanitize=address
 
-THREADS := -pthread
+THREADS			:= -lpthread
 
-AR		:= ar
+AR				:= ar
 
-ARFLAGS	:= rcs
+ARFLAGS			:= rcs
 
-MLXFLAGS := -lXext -lX11
+MLXFLAGS		:= -lXext -lX11
 
-MATHFLAG := -lm
+MATHFLAG		:= -lm
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::HEADERS::
 
-LINC	= $(addprefix $(LDIR)/, $(IDIR))
+LINC			= $(addprefix $(LDIR)/, $(IDIR))
 
-PFINC	= $(addprefix $(PFDIR)/, $(IDIR))
+PFINC			= $(addprefix $(PFDIR)/, $(IDIR))
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LIBRARY::
 
@@ -102,16 +102,16 @@ MINILIBX_PATH	= $(addprefix $(MDIR)/, ${MINILIBX})
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COLORS::
 
-BLUE		=	\033[1;34m
-CYAN		=	\033[0;36m
-GREEN		=	\033[0;92m
-BGREEN		=	\033[1;92m
-ORANGE  	=	\033[0;33m
-NO_COLOR	=	\033[m
-PURPLE		=	\033[0;35m
-BPURPLE		=	\033[1;35m
-BCYAN		=	\033[1;36m
-ICYAN		=	\033[3;36m
+BLUE			=	\033[1;34m
+CYAN			=	\033[0;36m
+GREEN			=	\033[0;92m
+BGREEN			=	\033[1;92m
+ORANGE 		 	=	\033[0;33m
+NO_COLOR		=	\033[m
+PURPLE			=	\033[0;35m
+BPURPLE			=	\033[1;35m
+BCYAN			=	\033[1;36m
+ICYAN			=	\033[3;36m
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::PARAMS::
 
@@ -142,11 +142,11 @@ vpath %.o $(ODIR)\
 all:			header lib h2 message $(NAME)
 
 $(ODIR)/%.o:	%.c 
-	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(INCLUDE_FLAGS) -c $< -o $@ 
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(THREADS) $(INCLUDE_FLAGS) -c $< -o $@ 
 	@echo "$(GREEN)compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(NAME):		$(OBJS)	
-	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(OBJS) -o $(NAME)
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(THREADS) $(OBJS) -o $(NAME)
 	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(OBJS):		| $(ODIR)
@@ -186,28 +186,22 @@ ifeq ($(IS_MINILIBX),true)
 	@make -C $(MDIR) --quiet 
 endif
 
-update:	header fclean
+update:		header fclean
 	@git pull
 
-push:	header fclean
+push:		header fclean
 	@echo "$(GREEN)"
 	@git add .
 	@git commit --quiet
 	@git push --quiet
 	@echo "$(GREEN)git push:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
-clean:	header
-ifneq ($(wildcard ./$(ODIR)),)
+clean:		header
 	@rm -rf $(ODIR)
 	@rm -rf $(BODIR)
 	@echo "$(ORANGE)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
-else
-	@rm -f $(wildcard *.o)
-	@rm -f $(wildcard *.d)
-	@echo "$(ORANGE)obj files:\t\t\t\t\t\t[RM]$(NO_COLOR)"
-endif
 
-fclean:	header clean
+fclean:		header clean
 	@rm -f $(NAME)
 	@rm -f $(BNAME)
 	@echo "$(ORANGE)$(NAME) executable:\t\t\t\t\t[RM]$(NO_COLOR)"

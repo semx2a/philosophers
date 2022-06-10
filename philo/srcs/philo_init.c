@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/10 18:27:42 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/10 18:32:35 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ int	check_params(t_main *m, int ac, char **av)
 
 int	size_check(t_main *m)
 {
-	if (m->philo_nb == INT_MAX || m->philo_nb == INT_MIN)
+	if (m->philo_nb >= INT_MAX || m->philo_nb <= INT_MIN)
 		return (0);
-	if (m->time_2die == INT_MAX || m->philo_nb == INT_MIN)
+	if (m->time_2die >= INT_MAX || m->philo_nb <= INT_MIN)
 		return (0);
-	if (m->time_2eat == INT_MAX || m->philo_nb == INT_MIN)
+	if (m->time_2eat >= INT_MAX || m->philo_nb <= INT_MIN)
 		return (0);
-	if (m->time_2sleep == INT_MAX || m->philo_nb == INT_MIN)
+	if (m->time_2sleep >= INT_MAX || m->philo_nb <= INT_MIN)
 		return (0);
-	if (m->u_eats == INT_MAX || m->philo_nb == INT_MIN)
+	if (m->u_eats >= INT_MAX || m->philo_nb <= INT_MIN)
 		return (0);
 	return (1);
 }

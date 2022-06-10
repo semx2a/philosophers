@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/09 17:27:20 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/10 18:25:50 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 
 //		ERRORS
 # define ERR			"Error"
+# define ERR_PARAM		"Error: only digits allowed"
 
 //		PARAMETERS
 # define INT_MIN		-2147483648
@@ -59,15 +60,32 @@ typedef struct s_lst
 //		push_swap.c
 typedef struct s_main
 {
-	int		i;
-	int		j;
-	int		k;
-	int		fd;
-	int		size;
-	int		*arr;
-	int		**tab;
-	char	*str;
-	char	**stab;
+	int				i;
+	int				j;
+	int				k;
+	int				fd;
+	int				philo_nb;
+	int				time_2die;
+	int				time_2eat;
+	int				time_2sleep;
+	int				u_eats;
+	int				size;
+	int				*arr;
+	int				**tab;
+	char			*str;
+	char			**stab;	
+	struct timeval	start;
+	struct timeval	end;
 }	t_main;
+
+//		philo_init.c
+int		init_params(t_main *m, int ac, char **av);
+
+//		philo_utils.c
+float	time_diff(struct timeval *start, struct timeval *end);
+int		ft_isdigit(int c);
+long	ft_atoli(const char *str);
+size_t	ft_strlen(const char *str);
+
 
 #endif

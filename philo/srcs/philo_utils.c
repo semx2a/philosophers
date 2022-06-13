@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:34 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/10 18:43:27 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/13 19:17:56 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,5 @@ float	time_diff(struct timeval *start, struct timeval *end)
 void	ft_error(char *str)
 {
 	write(2, str, ft_strlen(str));
+	write(2, "\n", 1);
 }

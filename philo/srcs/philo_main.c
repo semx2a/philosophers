@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/10 18:43:23 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/13 21:22:41 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,16 @@
 		-> int		pthread_mutex_unlock(pthread_mutex_t *mutex);
 
 		args:
-		1 ->		number_of_philosophers
-		2 ->		time_to_die 
-		3 ->		time_to_eat
-		4 ->		time_to_sleep
-		5 -> 		[optional] number_of_times_each_philosopher_must_eat
+		2 ->		number_of_philosophers
+		3 ->		time_to_die 
+		4 ->		time_to_eat
+		5 ->		time_to_sleep
+		6 -> 		[optional] number_of_times_each_philosopher_must_eat
+
+		A faire:
+		-> ft_usleep pour gerer les usleep de maniere fine
+		-> un thread join par thread create dans le main thread
+		-> verifier les mutex deadlock avec [valgrind --tool=helgrind] 
 */
 
 #include "../inc/philo.h"
@@ -54,8 +59,11 @@ int	main(int ac, char **av)
 	t_main	m;
 
 	m = (t_main){0};
-	if (ac != 4 || ac != 5)
+	if (ac < 5 || ac > 6)
+	{
+		ft_error(ERR_ARGS);
 		return (0);
+	}
 	if (!init_params(&m, ac, av))
 		return (0);
 //	gettimeofday(&m.start, 0);

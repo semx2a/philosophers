@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/10 18:25:50 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/13 21:01:23 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@
 
 //		ERRORS
 # define ERR			"Error"
-# define ERR_PARAM		"Error: only digits allowed"
+# define ERR_DIGITS		"Error: only digits allowed."
+# define ERR_ARGS		"Error: only 4 or 5 arguments allowed."
+# define ERR_MAXINT		"Error: MAXINT detected."
 
 //		PARAMETERS
 # define INT_MIN		-2147483648
@@ -86,6 +88,6 @@ float	time_diff(struct timeval *start, struct timeval *end);
 int		ft_isdigit(int c);
 long	ft_atoli(const char *str);
 size_t	ft_strlen(const char *str);
-
+void	ft_error(char *str);
 
 #endif

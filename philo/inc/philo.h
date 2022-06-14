@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/13 21:01:23 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/14 21:24:47 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_main
 	int				**tab;
 	char			*str;
 	char			**stab;	
+	float			*time;
 	struct timeval	start;
 	struct timeval	end;
 }	t_main;

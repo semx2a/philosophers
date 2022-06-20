@@ -6,30 +6,29 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/14 19:35:00 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/20 23:18:42 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	check_params(t_main *m, int ac, char **av)
+int	check_params(int ac, char **av)
 {
-	m->i = 1;
-	while (m->i < ac)
+	int	i;
+	int	j;
+
+	i = 1;
+	while (i < ac)
 	{
-		m->j = 0;
-		while (av[m->i][m->j])
+		j = 0;
+		while (av[i][j])
 		{
-			if (av[m->i][m->j] == '+' || av[m->i][m->j] == '-')
-				m->j++;
-			if (!ft_isdigit(av[m->i][m->j]))
+			if (!ft_isdigit(av[i][j]))
 				return (0);
-			m->j++;
+			j++;
 		}
-		m->i++;
+		i++;
 	}
-	m->i = 0;
-	m->j = 0;
 	return (1);
 }
 
@@ -37,30 +36,39 @@ int	size_check(t_main *m)
 {
 	if (m->philo_nb >= INT_MAX || m->philo_nb <= INT_MIN)
 		return (0);
-	if (m->time_2die >= INT_MAX || m->time_2die <= INT_MIN)
+	if (m->time_2die >= INT_MAX)
 		return (0);
-	if (m->time_2eat >= INT_MAX || m->time_2eat <= INT_MIN)
+	if (m->time_2eat >= INT_MAX)
 		return (0);
-	if (m->time_2sleep >= INT_MAX || m->time_2sleep <= INT_MIN)
+	if (m->time_2sleep >= INT_MAX)
 		return (0);
-	if (m->u_eats >= INT_MAX || m->u_eats <= INT_MIN)
+	if (m->n_eats >= INT_MAX || m->n_eats <= INT_MIN)
 		return (0);
 	return (1);
 }
 
 int	init_params(t_main *m, int ac, char **av)
 {	
-	if (!check_params(m, ac, av))
+	if (!check_params(ac, av))
 	{
 		ft_error(ERR_DIGITS);
 		return (0);
 	}
 	m->philo_nb = ft_atoli(av[1]);
+	if (m->philo_nb > MAX_THREADS)
+		return (0);
+	m->forks = m->philo_nb;
 	m->time_2die = ft_atoli(av[2]);
 	m->time_2eat = ft_atoli(av[3]);
 	m->time_2sleep = ft_atoli(av[4]);
 	if (ac == 6)
-		m->u_eats = ft_atoli(av[5]);
+		m->n_eats = ft_atoli(av[5]);
+	m->philosophers = malloc(sizeof(pthread_t) * m->philo_nb);
+	if (!m->philosophers)
+		return (0);	
+	m->ret = malloc(sizeof(int) * m->philo_nb);
+	if (!m->ret)
+		return (0);
 	if (!size_check(m))
 	{
 		ft_error(ERR_MAXINT);

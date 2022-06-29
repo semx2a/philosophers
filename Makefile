@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/06/20 20:43:08 by seozcan          ###   ########.fr        #
+#    Updated: 2022/06/28 13:01:12 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ BNAME			:= $(addprefix $(BPATH)/, philo_bonus)
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCES::
 
-SRCS			:= philo_main.c philo_init.c philo_utils.c 
+SRCS			:= philo_main.c philo_init.c philo_utils.c philo_time.c\
+philo_routine.c 
 
 OBJS			= $(addprefix $(ODIR)/, $(SRCS:.c=.o))
 
@@ -54,11 +55,13 @@ BOBJS			= $(addprefix $(BODIR)/,$(BSRCS:.c=.o))
 
 CC				:= gcc
 
-WFLAGS			:= -MMD -Wall -Wextra -Werror
+WFLAGS			:= -MMD -Wall -Wextra -Werror -Wconversion
 
 GFLAG			:= -g3
 
 SANFLAG			:= -fsanitize=address
+
+SANTHREAD		:= -fsanitize=thread
 
 THREADS			:= -pthread
 
@@ -142,11 +145,11 @@ vpath %.o $(ODIR)\
 all:			header lib h2 message $(NAME)
 
 $(ODIR)/%.o:	%.c 
-	@$(CC) $(WFLAGS) $(GFLAG) $(THREADS) $(INCLUDE_FLAGS) -c $< -o $@ 
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANTHREAD) $(THREADS) $(INCLUDE_FLAGS) -c $< -o $@ 
 	@echo "$(GREEN)compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(NAME):		$(OBJS)	
-	@$(CC) $(WFLAGS) $(GFLAG) $(THREADS) $(OBJS) -o $(NAME)
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANTHREAD) $(THREADS) $(OBJS) -o $(NAME)
 	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(OBJS):		| $(ODIR)
@@ -160,7 +163,7 @@ $(ODIR):
 bonus:			header lib h3 message_b $(BNAME)
 
 $(BODIR)/%.o:	%.c 
-	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(INCLUDE_FLAGS) -c $< -o $@ 
+	@$(CC) $(WFLAGS) $(GFLAG) $(INCLUDE_FLAGS) -c $< -o $@ 
 	@echo "$(GREEN)bonus compilation:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(BNAME):		$(BOBJS)

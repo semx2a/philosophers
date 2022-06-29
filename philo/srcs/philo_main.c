@@ -6,32 +6,12 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/20 23:00:46 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/27 19:12:29 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 		PHILOSOPHERS
-
-		AUTHORIZED FUNCTIONS:
-		-> void		*memset(void *s, int c, size_t n);
-		-> int		printf(const char *format, ...);
-		-> void		*malloc(size_t size);
-		-> void		free(void *ptr);
-		-> ssize_t	write(int fd, const void *buf, size_t count);
-		-> int		usleep(useconds_t usec);
-		-> int 		gettimeofday(struct timeval *tv, struct timezone *tz);
-
-		THREAD FUNCTIONS:
-		-> int 		pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
-		-> int 		pthread_detach(pthread_t thread);
-		-> int		pthread_join(pthread_t thread, void **retval);
-		
-		MUTEX FUNCTIONS:
-		-> int 		pthread_mutex_init(pthread_mutex_t *restrict mutex,	const pthread_mutexattr_t *restrict attr);
-		-> int		pthread_mutex_destroy(pthread_mutex_t *mutex);
-		-> int		pthread_mutex_lock(pthread_mutex_t *mutex);
-		-> int		pthread_mutex_unlock(pthread_mutex_t *mutex);
 
 		ARGS:
 		av[1]		number_of_philosophers
@@ -42,23 +22,50 @@
 
 		TO DO LIST:
 		-> ft_usleep pour gerer les usleep de maniere fine
-		-> un thread join par thread create dans le main thread
-		-> verifier les mutex deadlock avec [valgrind --tool=helgrind] 	
-		
-		TO IMPLEMENT:
-		printf("%0.8f : philosopher %d has taken a fork", time_diff(&m.start, &m.end), philo_id);
-		printf("%0.8f : philosopher %d is eating", time_diff(&m.start, &m.end), philo_id);
-		printf("%0.8f : philosopher %d is sleeping", time_diff(&m.start, &m.end), philo_id);
-		printf("%0.8f : philosopher %d is thinking", time_diff(&m.start, &m.end), philo_id);
-		printf("%0.8f : philosopher %d died", time_diff(&m.start, &m.end), philo_id);
 */
 
 #include "../inc/philo.h"
 
-void	*routine(void *p_data)
+int	philosophers_init(t_main *m)
 {
-	printf("philosopher #%ld\n", (intptr_t)p_data);
-	return (NULL);
+	unsigned int	i;
+
+	i = 0;
+	m->p.philo_id = 0;
+	while (i < m->p.philo_nb)
+	{
+		m->ret[i] = pthread_create(&m->p.philosophers[i], NULL,
+				&routine, m);
+		if (m->ret[i] != 0)
+		{
+			printf(DEAD, time_diff(&m->t), m->mt.data);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	philosophers_join(t_main *m)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < m->p.philo_nb)
+	{
+		if (pthread_join(m->p.philosophers[i],
+				(void *)(intptr_t)m->ret[i]) != 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	ft_clean(t_main *m)
+{
+	pthread_mutex_destroy(&m->mt.mutex);
+	free(m->p.philosophers);
+	free(m->ret);
 }
 
 int	main(int ac, char **av)
@@ -66,6 +73,9 @@ int	main(int ac, char **av)
 	t_main	m;
 
 	m = (t_main){0};
+	m.p = (t_philos){0};
+	m.mt = (t_mutex){0};
+	m.t = (t_time){0};
 	if (ac < 5 || ac > 6)
 	{
 		ft_error(ERR_ARGS);
@@ -73,26 +83,15 @@ int	main(int ac, char **av)
 	}
 	if (!init_params(&m, ac, av))
 		return (0);
-	while (m.i < m.philo_nb)
-	{
-		m.ret[m.i] = pthread_create(&m.philosophers[m.i], NULL,
-				&routine, (void*)(intptr_t)m.i);
-		if (m.ret[m.i] != 0)
-		{
-			ft_error(ERR_THREAD);
+	if (pthread_mutex_init(&m.mt.mutex, NULL) != 0)
+		return (0);
+//	while (1)
+//	{
+		if (!philosophers_init(&m))
 			return (0);
-		}
-		m.i++;
-	}
-	m.i = 0;
-	while (m.i < m.philo_nb)
-	{
-		if (pthread_join(m.philosophers[m.i], 
-			(void *)(intptr_t)m.ret[m.i]) != 0)
+		if (!philosophers_join(&m))
 			return (0);
-		m.i++;
-	}
-	free(m.philosophers);
-	free(m.ret);
+//	}
+	ft_clean(&m);
 	return (0);
 }

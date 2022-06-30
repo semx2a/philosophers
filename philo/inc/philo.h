@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/29 16:59:59 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/30 17:18:54 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@
 # define ERR			"Error\n"
 # define ERR_DIGITS		"Error: only digits allowed.\n"
 # define ERR_ARGS		"Error: only 4 or 5 arguments allowed.\n"
-# define ERR_MAXINT		"Error: MAXINT detected.\n"
-
+# define ERR_ALLOC		"Error: allocation failed.\n"
 //		PARAMETERS
 # define INT_MAX		2147483647
 # define MAX_THREADS	1024
@@ -56,9 +55,9 @@
 //		STRUCTURES
 typedef struct s_time
 {
-	useconds_t		time2_d;
-	useconds_t		time2_e;
-	useconds_t		time2_s;	
+	useconds_t		time2_die;
+	useconds_t		time2_eat;
+	useconds_t		time2_sleep;	
 	struct timeval	start;
 	struct timeval	step;
 }	t_time;
@@ -66,7 +65,8 @@ typedef struct s_time
 typedef struct s_mutex
 {
 	unsigned long	data;
-	pthread_mutex_t		mutex;
+	pthread_mutex_t	mutex;
+	pthread_mutex_t	forks;
 }	t_mutex;
 
 typedef struct s_philos
@@ -75,9 +75,6 @@ typedef struct s_philos
 	unsigned long	philo_id;
 	unsigned long	forks;
 	unsigned long	n_eats;
-	unsigned long	time_2die;
-	unsigned long	time_2eat;
-	unsigned long	time_2sleep;
 	pthread_t		*philosophers;
 }	t_philos;
 
@@ -85,7 +82,7 @@ typedef struct s_main
 {
 	int			i;
 	int			j;
-	int			*ret;
+	int			*err;
 	t_philos	p;
 	t_mutex		mt;
 	t_time		t;
@@ -105,5 +102,6 @@ int				ft_isdigit(int c);
 unsigned long	ft_atolu(const char *str);
 size_t			ft_strlen(const char *str);
 void			ft_error(char *str);
+void			*xmalloc(size_t size);
 
 #endif

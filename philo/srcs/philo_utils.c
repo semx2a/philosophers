@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:34 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/29 17:02:32 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/30 17:09:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,14 @@ size_t	ft_strlen(const char *str)
 void	ft_error(char *str)
 {
 	write(2, str, ft_strlen(str));
+}
+
+void	*xmalloc(size_t size)
+{
+	void	*tmp;
+
+	tmp = malloc(size);
+	if (!tmp)
+		ft_error(ERR);
+	return (tmp);
 }

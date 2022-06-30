@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/27 19:12:29 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/30 17:19:18 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	philosophers_init(t_main *m)
 	m->p.philo_id = 0;
 	while (i < m->p.philo_nb)
 	{
-		m->ret[i] = pthread_create(&m->p.philosophers[i], NULL,
+		m->err[i] = pthread_create(&m->p.philosophers[i], NULL,
 				&routine, m);
-		if (m->ret[i] != 0)
+		if (m->err[i] != 0)
 		{
 			printf(DEAD, time_diff(&m->t), m->mt.data);
 			return (0);
@@ -54,18 +54,18 @@ int	philosophers_join(t_main *m)
 	while (i < m->p.philo_nb)
 	{
 		if (pthread_join(m->p.philosophers[i],
-				(void *)(intptr_t)m->ret[i]) != 0)
+				(void *)(intptr_t)m->err[i]) != 0)
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	ft_clean(t_main *m)
+void	ft_flush(t_main *m)
 {
 	pthread_mutex_destroy(&m->mt.mutex);
 	free(m->p.philosophers);
-	free(m->ret);
+	free(m->err);
 }
 
 int	main(int ac, char **av)
@@ -85,13 +85,10 @@ int	main(int ac, char **av)
 		return (0);
 	if (pthread_mutex_init(&m.mt.mutex, NULL) != 0)
 		return (0);
-//	while (1)
-//	{
-		if (!philosophers_init(&m))
-			return (0);
-		if (!philosophers_join(&m))
-			return (0);
-//	}
-	ft_clean(&m);
+	if (!philosophers_init(&m))
+		return (0);
+	if (!philosophers_join(&m))
+		return (0);
+	ft_flush(&m);
 	return (0);
 }

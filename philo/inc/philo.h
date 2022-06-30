@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/28 13:16:32 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/06/29 16:59:59 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,44 +65,44 @@ typedef struct s_time
 
 typedef struct s_mutex
 {
-	long unsigned int	data;
+	unsigned long	data;
 	pthread_mutex_t		mutex;
 }	t_mutex;
 
 typedef struct s_philos
 {
-	long unsigned	philo_nb;
-	long unsigned	philo_id;
-	long unsigned	forks;
-	long unsigned	n_eats;
-	long unsigned	time_2die;
-	long unsigned	time_2eat;
-	long unsigned	time_2sleep;
+	unsigned long	philo_nb;
+	unsigned long	philo_id;
+	unsigned long	forks;
+	unsigned long	n_eats;
+	unsigned long	time_2die;
+	unsigned long	time_2eat;
+	unsigned long	time_2sleep;
 	pthread_t		*philosophers;
 }	t_philos;
 
 typedef struct s_main
 {
-	int				i;
-	int				j;
-	int				*ret;
-	t_philos		p;
-	t_mutex			mt;
-	t_time			t;
+	int			i;
+	int			j;
+	int			*ret;
+	t_philos	p;
+	t_mutex		mt;
+	t_time		t;
 }	t_main;
 
 //		philo_routine.c
 void			*routine(void *p_data);
 
 //		philo_times.c
-long			time_diff(t_time *t);
+unsigned long	time_diff(t_time *t);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);
 
 //		philo_utils.c
 int				ft_isdigit(int c);
-long unsigned	ft_atolu(const char *str);
+unsigned long	ft_atolu(const char *str);
 size_t			ft_strlen(const char *str);
 void			ft_error(char *str);
 

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/30 17:18:54 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/04 16:22:33 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define ERR_DIGITS		"Error: only digits allowed.\n"
 # define ERR_ARGS		"Error: only 4 or 5 arguments allowed.\n"
 # define ERR_ALLOC		"Error: allocation failed.\n"
+# define ERR_MUTEX		"Error: mutex init failed.\n"
 //		PARAMETERS
 # define INT_MAX		2147483647
 # define MAX_THREADS	1024
@@ -66,14 +67,18 @@ typedef struct s_mutex
 {
 	unsigned long	data;
 	pthread_mutex_t	mutex;
-	pthread_mutex_t	forks;
+	pthread_mutex_t	fork_l;
+	pthread_mutex_t	fork_r;
+	pthread_mutex_t	sleep;
+	pthread_mutex_t	think;
 }	t_mutex;
 
 typedef struct s_philos
 {
 	unsigned long	philo_nb;
 	unsigned long	philo_id;
-	unsigned long	forks;
+	unsigned long	l_fork;
+	unsigned long	r_fork;
 	unsigned long	n_eats;
 	pthread_t		*philosophers;
 }	t_philos;

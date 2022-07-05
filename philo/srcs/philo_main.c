@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/30 17:19:18 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/04 16:22:12 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,10 @@ int	philosophers_join(t_main *m)
 void	ft_flush(t_main *m)
 {
 	pthread_mutex_destroy(&m->mt.mutex);
+	pthread_mutex_destroy(&m->mt.fork_l);
+	pthread_mutex_destroy(&m->mt.fork_r);
+	pthread_mutex_destroy(&m->mt.sleep);
+	pthread_mutex_destroy(&m->mt.think);
 	free(m->p.philosophers);
 	free(m->err);
 }
@@ -82,8 +86,6 @@ int	main(int ac, char **av)
 		return (0);
 	}
 	if (!init_params(&m, ac, av))
-		return (0);
-	if (pthread_mutex_init(&m.mt.mutex, NULL) != 0)
 		return (0);
 	if (!philosophers_init(&m))
 		return (0);

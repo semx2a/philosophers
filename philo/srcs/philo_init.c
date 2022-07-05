@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/06/30 17:18:54 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/04 16:23:02 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,21 @@ int	params_alloc(t_main *m, int ac, char **av)
 		return (0);
 	m->p.philosophers = (pthread_t *)xmalloc(sizeof(pthread_t) * m->p.philo_nb);
 	m->err = (int *)xmalloc(sizeof(int) * m->p.philo_nb);
-	if (m->p.philo_nb != 1 && m->p.philo_nb % 1 == 0)
-		m->p.forks = m->p.philo_nb - 1;
-	else
-		m->p.forks = m->p.philo_nb;
+	return (1);
+}
+
+int	mutex_init(t_main *m)
+{
+	if (pthread_mutex_init(&m->mt.mutex, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.fork_l, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.fork_r, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.sleep, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.think, NULL) != 0)
+		return (0);
 	return (1);
 }
 
@@ -63,6 +74,11 @@ int	init_params(t_main *m, int ac, char **av)
 	if (!params_alloc(m, ac, av))
 	{
 		ft_error(ERR_ALLOC);
+		return (0);
+	}
+	if (!mutex_init(m))
+	{
+		ft_error(ERR_MUTEX);
 		return (0);
 	}
 	gettimeofday(&m->t.start, NULL);

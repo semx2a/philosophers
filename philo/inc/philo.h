@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/06 17:46:36 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/06 20:23:21 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,8 @@ typedef struct s_time
 
 typedef struct s_mutex
 {
-	unsigned long	data;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	mutex;
-	pthread_mutex_t	fork_l;
-	pthread_mutex_t	fork_r;
 	pthread_mutex_t	sleep;
 	pthread_mutex_t	think;
 }	t_mutex;
@@ -110,6 +108,5 @@ int				ft_isdigit(int c);
 unsigned long	ft_atolu(const char *str);
 size_t			ft_strlen(const char *str);
 void			ft_error(char *str);
-void			*xmalloc(size_t size);
 
 #endif

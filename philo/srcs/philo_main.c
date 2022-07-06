@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/06 17:31:05 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/06 20:36:59 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	philosophers_init(t_main *m)
 				&routine, &m->p[i]);
 		if (m->err[i] != 0)
 		{
-			printf(DEAD, time_diff(&m->t), m->mt.data);
+			printf(DEAD, time_diff(&m->t), m->p->philo_id);
 			return (0);
 		}
 		i++;
@@ -63,9 +63,14 @@ int	philosophers_join(t_main *m)
 
 void	ft_flush(t_main *m)
 {
+	m->i = 0;
+	while (m->i < m->philo_nb)
+	{
+		pthread_mutex_destroy(&m->mt.forks[m->i]);
+		free(&m->p[m->i]);
+		m->i++;
+	}
 	pthread_mutex_destroy(&m->mt.mutex);
-	pthread_mutex_destroy(&m->mt.fork_l);
-	pthread_mutex_destroy(&m->mt.fork_r);
 	pthread_mutex_destroy(&m->mt.sleep);
 	pthread_mutex_destroy(&m->mt.think);
 	free(m->philosophers);

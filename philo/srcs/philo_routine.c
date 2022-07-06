@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/06 17:50:52 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/06 20:56:37 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,15 @@ void	p_sleep(t_philos *p)
 	pthread_mutex_unlock(&p->m->mt.sleep);
 }	
 
-int	eat(t_philos *p)
+void	eat(t_philos *p)
 {	
-	pthread_mutex_lock(&p->m->mt.fork_l);
-	if (p->l_fork == 0 && p->r_fork == 0)
-	{
-		p->l_fork = 1;
-		p->r_fork = 1;
-		printf(FORK, time_diff(&p->m->t), p->philo_id);
-		printf(EATING, time_diff(&p->m->t), p->philo_id);
-		usleep((p->m->t.time2_eat));
-		p->l_fork = 0;
-		p->r_fork = 0;
-	}
-	else
-	{
-		pthread_mutex_unlock(&p->m->mt.fork_l);
-		return (0);
-	}
-	pthread_mutex_unlock(&p->m->mt.fork_l);
-	return (1);
+	pthread_mutex_lock(&p->m->mt.forks[p->l_fork]);
+	pthread_mutex_lock(&p->m->mt.forks[p->r_fork]);
+	printf(FORK, time_diff(&p->m->t), p->philo_id);
+	printf(EATING, time_diff(&p->m->t), p->philo_id);
+	usleep((p->m->t.time2_eat));
+	pthread_mutex_unlock(&p->m->mt.forks[p->l_fork]);
+	pthread_mutex_unlock(&p->m->mt.forks[p->r_fork]);
 }
 
 void	think(t_philos *p)
@@ -55,9 +44,11 @@ void	*routine(void *p_data)
 	t_philos	*p;
 
 	p = (t_philos *)p_data;
-	if (eat(p) == 0)
+	while (1)
+	{	
+		eat(p);
 		p_sleep(p);
-	else
 		think(p);
+	}
 	return (NULL);
 }

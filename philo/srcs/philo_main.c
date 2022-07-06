@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/04 16:22:12 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/06 17:31:05 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ int	philosophers_init(t_main *m)
 	unsigned int	i;
 
 	i = 0;
-	m->p.philo_id = 0;
-	while (i < m->p.philo_nb)
+	while (i < m->philo_nb)
 	{
-		m->err[i] = pthread_create(&m->p.philosophers[i], NULL,
-				&routine, m);
+		m->p[i].philo_id = i;
+		m->err[i] = pthread_create(&m->philosophers[i], NULL,
+				&routine, &m->p[i]);
 		if (m->err[i] != 0)
 		{
 			printf(DEAD, time_diff(&m->t), m->mt.data);
@@ -51,9 +51,9 @@ int	philosophers_join(t_main *m)
 	unsigned int	i;
 
 	i = 0;
-	while (i < m->p.philo_nb)
+	while (i < m->philo_nb)
 	{
-		if (pthread_join(m->p.philosophers[i],
+		if (pthread_join(m->philosophers[i],
 				(void *)(intptr_t)m->err[i]) != 0)
 			return (0);
 		i++;
@@ -68,7 +68,7 @@ void	ft_flush(t_main *m)
 	pthread_mutex_destroy(&m->mt.fork_r);
 	pthread_mutex_destroy(&m->mt.sleep);
 	pthread_mutex_destroy(&m->mt.think);
-	free(m->p.philosophers);
+	free(m->philosophers);
 	free(m->err);
 }
 
@@ -77,7 +77,6 @@ int	main(int ac, char **av)
 	t_main	m;
 
 	m = (t_main){0};
-	m.p = (t_philos){0};
 	m.mt = (t_mutex){0};
 	m.t = (t_time){0};
 	if (ac < 5 || ac > 6)

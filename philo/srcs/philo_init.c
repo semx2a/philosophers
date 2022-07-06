@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/04 16:23:02 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/06 17:49:50 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,34 @@ int	check_params(int ac, char **av)
 	return (1);
 }
 
-int	params_alloc(t_main *m, int ac, char **av)
+int	main_alloc(t_main *m, int ac, char **av)
 {	
-	m->p.philo_nb = ft_atolu(av[1]);
-	if (m->p.philo_nb > MAX_THREADS || m->p.philo_nb >= INT_MAX)
+	m->philo_nb = ft_atolu(av[1]);
+	if (m->philo_nb > MAX_THREADS || m->philo_nb >= INT_MAX)
 		return (0);
 	m->t.time2_die = (useconds_t)ft_atolu(av[2]) * 1000;
 	m->t.time2_eat = (useconds_t)ft_atolu(av[3]) * 1000;
 	m->t.time2_sleep = (useconds_t)ft_atolu(av[4]) * 1000;
 	if (ac == 6)
-		m->p.n_eats = ft_atolu(av[5]);
-	if (m->p.n_eats >= INT_MAX)
+		m->n_eats = ft_atolu(av[5]);
+	if (m->n_eats >= INT_MAX)
 		return (0);
-	m->p.philosophers = (pthread_t *)xmalloc(sizeof(pthread_t) * m->p.philo_nb);
-	m->err = (int *)xmalloc(sizeof(int) * m->p.philo_nb);
+	m->philosophers = (pthread_t *)xmalloc(sizeof(pthread_t) * m->philo_nb);
+	m->err = (int *)xmalloc(sizeof(int) * m->philo_nb);
 	return (1);
+}
+
+int	philos_alloc(t_main *m)
+{
+	m->p = xmalloc(sizeof(t_philos) * m->philo_nb);
+	while (m->i < m->philo_nb)
+	{
+		m->p[m->i] = (t_philos){0};
+		m->p[m->i].r_fork = m->i;
+		m->p[m->i].l_fork = m->i + 1 % m->philo_nb;
+		m->p[m->i].m = m;
+		m->i++;
+	}
 }
 
 int	mutex_init(t_main *m)
@@ -71,9 +84,14 @@ int	init_params(t_main *m, int ac, char **av)
 		ft_error(ERR_DIGITS);
 		return (0);
 	}
-	if (!params_alloc(m, ac, av))
+	if (!main_alloc(m, ac, av))
 	{
 		ft_error(ERR_ALLOC);
+		return (0);
+	}
+	if (!philos_alloc(m))
+	{
+		ft_error(ERR_PHILOS);
 		return (0);
 	}
 	if (!mutex_init(m))

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/06 20:36:59 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/07 18:48:00 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@
 		av[3]		time_to_eat
 		av[4]		time_to_sleep
 		av[5] 		[optional] number_of_times_each_philosopher_must_eat
-
-		TO DO LIST:
-		-> ft_usleep pour gerer les usleep de maniere fine
 */
 
 #include "../inc/philo.h"
@@ -70,7 +67,7 @@ void	ft_flush(t_main *m)
 		free(&m->p[m->i]);
 		m->i++;
 	}
-	pthread_mutex_destroy(&m->mt.mutex);
+	pthread_mutex_destroy(&m->mt.print);
 	pthread_mutex_destroy(&m->mt.sleep);
 	pthread_mutex_destroy(&m->mt.think);
 	free(m->philosophers);

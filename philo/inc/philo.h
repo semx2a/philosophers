@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/06 20:23:21 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/07 18:48:00 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@
 # define MAX_THREADS	1024
 
 //		MESSAGES
-# define DEAD			"%lu philosopher %lu died\n"
-# define EATING			"%lu philosopher %lu is eating\n"
-# define FORK			"%lu philosopher %lu has taken a fork\n"
-# define THINKING		"%lu philosopher %lu is thinking\n"
-# define SLEEPING		"%lu philosopher %lu is thinking\n"
+# define DEAD			"%li philosopher %lu died\n"
+# define EATING			"%li philosopher %lu is eating\n"
+# define FORK			"%li philosopher %lu has taken a fork\n"
+# define THINKING		"%li philosopher %lu is thinking\n"
+# define SLEEPING		"%li philosopher %lu is thinking\n"
 
 //		STRUCTURES
 typedef struct s_time
@@ -68,7 +68,7 @@ typedef struct s_time
 typedef struct s_mutex
 {
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	mutex;
+	pthread_mutex_t	print;
 	pthread_mutex_t	sleep;
 	pthread_mutex_t	think;
 }	t_mutex;
@@ -98,7 +98,7 @@ typedef struct s_main
 void			*routine(void *p_data);
 
 //		philo_times.c
-unsigned long	time_diff(t_time *t);
+long	time_diff(t_time *t);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/06 20:39:32 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/07 18:48:00 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	mutex_init(t_main *m)
 			return (0);
 		m->i++;
 	}
-	if (pthread_mutex_init(&m->mt.mutex, NULL) != 0)
+	if (pthread_mutex_init(&m->mt.print, NULL) != 0)
 		return (0);
 	if (pthread_mutex_init(&m->mt.sleep, NULL) != 0)
 		return (0);

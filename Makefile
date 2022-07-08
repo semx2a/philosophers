@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/07/07 18:21:28 by seozcan          ###   ########.fr        #
+#    Updated: 2022/07/08 22:03:45 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ BNAME			:= $(addprefix $(BPATH)/, philo_bonus)
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCES::
 
-SRCS			:= philo_main.c philo_init.c philo_utils.c philo_time.c\
+SRCS			:= philo_main.c philo_init.c philo_utils.c philo_tools.c\
 philo_routine.c 
 
 OBJS			= $(addprefix $(ODIR)/, $(SRCS:.c=.o))
@@ -145,11 +145,11 @@ vpath %.o $(ODIR)\
 all:			header lib h2 message $(NAME)
 
 $(ODIR)/%.o:	%.c 
-	@$(CC) $(WFLAGS) $(GFLAG) $(SANTHREAD) $(THREADS) $(INCLUDE_FLAGS) -c $< -o $@ 
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(THREADS) $(INCLUDE_FLAGS) -c $< -o $@ 
 	@echo "$(GREEN)compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(NAME):		$(OBJS)	
-	@$(CC) $(WFLAGS) $(GFLAG) $(SANTHREAD) $(THREADS) $(OBJS) -o $(NAME)
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANFLAG) $(THREADS) $(OBJS) -o $(NAME)
 	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(OBJS):		| $(ODIR)

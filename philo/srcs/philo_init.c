@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/07 18:48:00 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/08 21:53:38 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_params(int ac, char **av)
 	return (1);
 }
 
-int	main_alloc(t_main *m, int ac, char **av)
+int	main_alloc(t_main *m, char **av)
 {	
 	m->philo_nb = ft_atolu(av[1]);
 	if (m->philo_nb > MAX_THREADS || m->philo_nb >= INT_MAX)
@@ -40,10 +40,6 @@ int	main_alloc(t_main *m, int ac, char **av)
 	m->t.time2_die = (useconds_t)ft_atolu(av[2]) * 1000;
 	m->t.time2_eat = (useconds_t)ft_atolu(av[3]) * 1000;
 	m->t.time2_sleep = (useconds_t)ft_atolu(av[4]) * 1000;
-	if (ac == 6)
-		m->n_eats = ft_atolu(av[5]);
-	if (m->n_eats >= INT_MAX)
-		return (0);
 	m->philosophers = (pthread_t *)malloc(sizeof(pthread_t) * m->philo_nb);
 	if (!m->philosophers)
 		return (0);
@@ -53,7 +49,7 @@ int	main_alloc(t_main *m, int ac, char **av)
 	return (1);
 }
 
-int	philos_alloc(t_main *m)
+int	philos_alloc(t_main *m, int ac, char **av)
 {
 	m->p = malloc(sizeof(t_philos) * m->philo_nb);
 	if (!m->p)
@@ -63,9 +59,16 @@ int	philos_alloc(t_main *m)
 		m->p[m->i] = (t_philos){0};
 		m->p[m->i].r_fork = m->i;
 		m->p[m->i].l_fork = m->i + 1 % m->philo_nb;
+		m->p[m->i].red_tape = 0;
+		if (ac == 6)
+			m->p[m->i].n_eats = ft_atolu(av[5]);
+		if (m->p[m->i].n_eats >= INT_MAX)
+			return (0);
 		m->p[m->i].m = m;
 		m->i++;
 	}
+	if (ac == 6)
+		m->food_limit = 1;
 	return (1);
 }
 
@@ -81,11 +84,19 @@ int	mutex_init(t_main *m)
 			return (0);
 		m->i++;
 	}
-	if (pthread_mutex_init(&m->mt.print, NULL) != 0)
-		return (0);
 	if (pthread_mutex_init(&m->mt.sleep, NULL) != 0)
 		return (0);
 	if (pthread_mutex_init(&m->mt.think, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.print_dead, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.print_sleep, NULL) != 0)
+		return (0);	
+	if (pthread_mutex_init(&m->mt.print_fork, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.print_eat, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.print_think, NULL) != 0)
 		return (0);
 	return (1);
 }
@@ -97,12 +108,12 @@ int	init_params(t_main *m, int ac, char **av)
 		ft_error(ERR_DIGITS);
 		return (0);
 	}
-	if (!main_alloc(m, ac, av))
+	if (!main_alloc(m, av))
 	{
 		ft_error(ERR_ALLOC);
 		return (0);
 	}
-	if (!philos_alloc(m))
+	if (!philos_alloc(m, ac, av))
 	{
 		ft_error(ERR_PHILOS);
 		return (0);

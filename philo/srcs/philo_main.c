@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/07 18:48:00 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/08 22:07:08 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ int	philosophers_init(t_main *m)
 	i = 0;
 	while (i < m->philo_nb)
 	{
-		m->p[i].philo_id = i;
+		m->p[i].philo_id = i + 1;
 		m->err[i] = pthread_create(&m->philosophers[i], NULL,
 				&routine, &m->p[i]);
 		if (m->err[i] != 0)
 		{
-			printf(DEAD, time_diff(&m->t), m->p->philo_id);
+			ft_error(ERR_THREAD);
 			return (0);
 		}
 		i++;
@@ -64,12 +64,17 @@ void	ft_flush(t_main *m)
 	while (m->i < m->philo_nb)
 	{
 		pthread_mutex_destroy(&m->mt.forks[m->i]);
-		free(&m->p[m->i]);
 		m->i++;
 	}
-	pthread_mutex_destroy(&m->mt.print);
 	pthread_mutex_destroy(&m->mt.sleep);
 	pthread_mutex_destroy(&m->mt.think);
+	pthread_mutex_destroy(&m->mt.print_dead);
+	pthread_mutex_destroy(&m->mt.print_sleep);
+	pthread_mutex_destroy(&m->mt.print_fork);
+	pthread_mutex_destroy(&m->mt.print_eat);
+	pthread_mutex_destroy(&m->mt.print_think);
+	free(m->mt.forks);
+	free(m->p);
 	free(m->philosophers);
 	free(m->err);
 }

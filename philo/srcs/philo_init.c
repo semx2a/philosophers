@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/08 21:53:38 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/12 22:55:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ int	main_alloc(t_main *m, char **av)
 	m->philo_nb = ft_atolu(av[1]);
 	if (m->philo_nb > MAX_THREADS || m->philo_nb >= INT_MAX)
 		return (0);
-	m->t.time2_die = (useconds_t)ft_atolu(av[2]) * 1000;
+	m->t.time2_die = (useconds_t)ft_atolu(av[2]);
 	m->t.time2_eat = (useconds_t)ft_atolu(av[3]) * 1000;
 	m->t.time2_sleep = (useconds_t)ft_atolu(av[4]) * 1000;
+	m->ghost = 0;
 	m->philosophers = (pthread_t *)malloc(sizeof(pthread_t) * m->philo_nb);
 	if (!m->philosophers)
 		return (0);
@@ -59,11 +60,12 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		m->p[m->i] = (t_philos){0};
 		m->p[m->i].r_fork = m->i;
 		m->p[m->i].l_fork = m->i + 1 % m->philo_nb;
-		m->p[m->i].red_tape = 0;
+		m->p[m->i].red_tape = m->t.time2_die + 10;
 		if (ac == 6)
 			m->p[m->i].n_eats = ft_atolu(av[5]);
 		if (m->p[m->i].n_eats >= INT_MAX)
 			return (0);
+		m->p[m->i].eat_counter = 0;
 		m->p[m->i].m = m;
 		m->i++;
 	}
@@ -88,15 +90,11 @@ int	mutex_init(t_main *m)
 		return (0);
 	if (pthread_mutex_init(&m->mt.think, NULL) != 0)
 		return (0);
-	if (pthread_mutex_init(&m->mt.print_dead, NULL) != 0)
+	if (pthread_mutex_init(&m->mt.display, NULL) != 0)
 		return (0);
-	if (pthread_mutex_init(&m->mt.print_sleep, NULL) != 0)
-		return (0);	
-	if (pthread_mutex_init(&m->mt.print_fork, NULL) != 0)
+	if (pthread_mutex_init(&m->mt.satiated, NULL) != 0)
 		return (0);
-	if (pthread_mutex_init(&m->mt.print_eat, NULL) != 0)
-		return (0);
-	if (pthread_mutex_init(&m->mt.print_think, NULL) != 0)
+	if (pthread_mutex_init(&m->mt.reaper, NULL) != 0)
 		return (0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/08 21:53:38 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/12 22:55:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,19 @@
 # define MAX_THREADS	1024
 
 //		MESSAGES
-# define DEAD			"%lu philosopher %lu died\n"
-# define EATING			"%lu philosopher %lu is eating\n"
-# define FORK			"%lu philosopher %lu has taken a fork\n"
-# define THINKING		"%lu philosopher %lu is thinking\n"
-# define SLEEPING		"%lu philosopher %lu is thinking\n"
+# define DEAD			"%lu %lu died\n"
+# define EATING			"%lu %lu is eating\n"
+# define FORK			"%lu %lu has taken a fork\n"
+# define THINKING		"%lu %lu is thinking\n"
+# define SLEEPING		"%lu %lu is sleeping\n"
 
 //		STRUCTURES
+//		unsigned long == time in usec
 typedef struct s_time
 {
 	unsigned long	time2_die;
 	unsigned long	time2_eat;
-	unsigned long	time2_sleep;	
+	unsigned long	time2_sleep;
 	struct timeval	start;
 	struct timeval	step;
 }	t_time;
@@ -71,11 +72,9 @@ typedef struct s_mutex
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	sleep;
 	pthread_mutex_t	think;
-	pthread_mutex_t	print_dead;
-	pthread_mutex_t	print_sleep;
-	pthread_mutex_t	print_fork;
-	pthread_mutex_t	print_eat;
-	pthread_mutex_t	print_think;
+	pthread_mutex_t	display;
+	pthread_mutex_t	satiated;
+	pthread_mutex_t	reaper;
 }	t_mutex;
 
 typedef struct s_philos
@@ -85,6 +84,7 @@ typedef struct s_philos
 	unsigned long	l_fork;
 	unsigned long	red_tape;
 	unsigned long	n_eats;
+	unsigned long	eat_counter;
 	struct s_main	*m;
 }	t_philos;
 
@@ -94,7 +94,9 @@ typedef struct s_main
 	size_t			j;
 	int				*err;
 	int				food_limit;
+	int				ghost;
 	unsigned long	philo_nb;
+	unsigned long	done_eating;
 	pthread_t		*philosophers;
 	t_philos		*p;
 	t_mutex			mt;
@@ -104,9 +106,15 @@ typedef struct s_main
 //		philo_routine.c
 void			*routine(void *p_data);
 
+//		philo_threads.c
+int				philosophers_init(t_main *m);
+int				philosophers_detach(t_main *m);
+int				philosophers_join(t_main *m);
+
 //		philo_tools.c
-unsigned long	time_diff(t_time *t);
+unsigned long	chrono(t_time *t);
 void			print_action(int i, t_philos *p);
+void			ft_flush(t_main *m);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);

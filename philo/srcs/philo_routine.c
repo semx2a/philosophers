@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/08 22:03:58 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/12 22:55:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,26 @@ void	p_sleep(t_philos *p)
 	pthread_mutex_unlock(&p->m->mt.sleep);
 }	
 
+int	is_full(t_philos *p)
+{
+	if (p->m->food_limit == 1 && p->eat_counter == p->n_eats)
+	{
+		pthread_mutex_lock(&p->m->mt.satiated);
+		p->m->done_eating += 1;
+		if (p->m->done_eating == p->m->philo_nb)
+		{	
+			pthread_mutex_unlock(&p->m->mt.satiated);
+			return (0);
+		}
+		pthread_mutex_unlock(&p->m->mt.satiated);
+	}
+	return (1);
+}
+
 int	eat(t_philos *p)
-{	
+{
+	if (p->m->philo_nb == 1)
+		return (0);
 	if (pthread_mutex_lock(&p->m->mt.forks[p->l_fork]) != 0)
 		return (0);
 	if (pthread_mutex_lock(&p->m->mt.forks[p->r_fork]) != 0)
@@ -29,11 +47,10 @@ int	eat(t_philos *p)
 	print_action(2, p);
 	print_action(3, p);
 	if (p->m->food_limit == 1)
-		p->n_eats--;
+		p->eat_counter++;
 	usleep((useconds_t)(p->m->t.time2_eat));
 	pthread_mutex_unlock(&p->m->mt.forks[p->l_fork]);
 	pthread_mutex_unlock(&p->m->mt.forks[p->r_fork]);
-	p_sleep(p);
 	return (1);
 }
 
@@ -50,21 +67,23 @@ void	*routine(void *p_data)
 	t_philos	*p;
 
 	p = (t_philos *)p_data;
-	while (p->red_tape <= time_diff(&p->m->t))
+	while (chrono(&p->m->t) < p->red_tape)
 	{
-		if (p->m->food_limit == 1)
+		pthread_mutex_lock(&p->m->mt.reaper);
+		if (p->m->ghost == 0)
 		{
-			eat(p);
-			think(p);
-			if (p->n_eats == 0)
+			pthread_mutex_unlock(&p->m->mt.reaper);
+			if (eat(p) == 1)
+				p_sleep(p);
+			if (!is_full(p))
 				return (NULL);
+			think(p);
 		}
 		else
-		{
-			eat(p);
-			think(p);
-		}
+			break ;
 	}
+	p->m->ghost = 1;
 	print_action(0, p);
+//	philosophers_detach(p->m);
 	return (NULL);
 }

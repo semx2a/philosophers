@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/12 22:55:34 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/13 17:18:54 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ int	main_alloc(t_main *m, char **av)
 	return (1);
 }
 
+//philo 1 1 2
+//philo 2 2 3 
+//philo 3 3 4
+//philo 4 4 1
+
 int	philos_alloc(t_main *m, int ac, char **av)
 {
 	m->p = malloc(sizeof(t_philos) * m->philo_nb);
@@ -58,8 +63,10 @@ int	philos_alloc(t_main *m, int ac, char **av)
 	while (m->i < m->philo_nb)
 	{
 		m->p[m->i] = (t_philos){0};
-		m->p[m->i].r_fork = m->i;
-		m->p[m->i].l_fork = m->i + 1 % m->philo_nb;
+		m->p[m->i].r_fork = m->i + 1 % m->philo_nb;
+		m->p[m->i].l_fork = m->i ;
+		if (m->i == m->philo_nb - 1)
+			m->p[m->i].r_fork = 0;
 		m->p[m->i].red_tape = m->t.time2_die + 10;
 		if (ac == 6)
 			m->p[m->i].n_eats = ft_atolu(av[5]);

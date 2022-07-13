@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/12 22:55:34 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/13 19:05:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	is_full(t_philos *p)
 }
 
 int	eat(t_philos *p)
-{
+{		
+//	printf("philo == %lu : l_fork == %lu | r_fork == %lu\n", p->philo_id, p->l_fork, p->r_fork);
 	if (p->m->philo_nb == 1)
 		return (0);
 	if (pthread_mutex_lock(&p->m->mt.forks[p->l_fork]) != 0)
@@ -69,21 +70,23 @@ void	*routine(void *p_data)
 	p = (t_philos *)p_data;
 	while (chrono(&p->m->t) < p->red_tape)
 	{
+		if (p->philo_id % 1 == 0)
+			usleep(200);
 		pthread_mutex_lock(&p->m->mt.reaper);
-		if (p->m->ghost == 0)
-		{
-			pthread_mutex_unlock(&p->m->mt.reaper);
-			if (eat(p) == 1)
-				p_sleep(p);
-			if (!is_full(p))
-				return (NULL);
-			think(p);
-		}
-		else
+		if (p->m->ghost != 0)
 			break ;
+		pthread_mutex_unlock(&p->m->mt.reaper);
+		if (eat(p) == 1)
+			p_sleep(p);
+		if (!is_full(p))
+			return (NULL);
+		think(p);
 	}
-	p->m->ghost = 1;
-	print_action(0, p);
-//	philosophers_detach(p->m);
+	pthread_mutex_lock(&p->m->mt.reaper);
+	if (p->m->ghost == 0)
+		p->m->ghost = (int)p->philo_id;
+	pthread_mutex_unlock(&p->m->mt.reaper);
+	if ((int)p->philo_id == p->m->ghost)
+		print_action(0, p);
 	return (NULL);
 }

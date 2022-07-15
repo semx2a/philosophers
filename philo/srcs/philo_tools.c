@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/13 16:56:28 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/15 17:59:23 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,38 +23,40 @@ unsigned long	chrono(t_time *t)
 	return ((unsigned long)(current - begin));
 }
 
-void	lock_action(t_philos *p, char *str, pthread_mutex_t *m)
-{
-	pthread_mutex_lock(m);
-	printf(str, chrono(&p->m->t), p->philo_id);
-	pthread_mutex_unlock(m);
-}
+//void	lock_action(t_philos *p, char *str, pthread_mutex_t *m)
+//{
+//	pthread_mutex_lock(m);
+//
+//	pthread_mutex_unlock(m);
+//}
 
-void	print_action(int i, t_philos *p)
-{	
-	pthread_mutex_lock(&p->m->mt.reaper);
-	if (p->m->ghost != 0)
-	{	
-		if (i == 0)
-			lock_action(p, DEAD, &p->m->mt.display);
-		pthread_mutex_unlock(&p->m->mt.reaper);
-		return ;
-	}
-	pthread_mutex_unlock(&p->m->mt.reaper);
-	if (i == 1)
-		lock_action(p, SLEEPING, &p->m->mt.display);
-	else if (i == 2)
-	{
-		lock_action(p, FORK, &p->m->mt.display);
-		lock_action(p, FORK, &p->m->mt.display);
-	}
-	else if (i == 3)
-	{
-		p->red_tape = chrono(&p->m->t) + p->m->t.time2_die + 10;
-		lock_action(p, EATING, &p->m->mt.display);
-	}
-	else if (i == 4)
-		lock_action(p, THINKING, &p->m->mt.display);
+void	print_action(char *str, t_philos *p)
+{
+	p->timestamp = chrono(&p->m->t);
+	printf(str, p->timestamp, p->philo_id);
+//	pthread_mutex_lock(&p->m->mt.reaper);
+//	if (p->m->ghost != 0)
+//	{	
+//		if (i == 0)
+//			lock_action(p, DEAD, &p->m->mt.display);
+//		pthread_mutex_unlock(&p->m->mt.reaper);
+//		return ;
+//	}
+//	pthread_mutex_unlock(&p->m->mt.reaper);
+//	if (i == 1)
+//		lock_action(p, SLEEPING, &p->m->mt.display);
+//	else if (i == 2)
+//	{
+//		lock_action(p, FORK, &p->m->mt.display);
+//		lock_action(p, FORK, &p->m->mt.display);
+//	}
+//	else if (i == 3)
+//	{
+//		p->red_tape = chrono(&p->m->t) + p->m->t.time2_die + 10;
+//		lock_action(p, EATING, &p->m->mt.display);
+//	}
+//	else if (i == 4)
+//		lock_action(p, THINKING, &p->m->mt.display);
 }
 
 void	ft_flush(t_main *m)

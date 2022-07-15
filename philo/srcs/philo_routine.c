@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/13 19:05:34 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/15 18:02:13 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	p_sleep(t_philos *p)
 {	
 	pthread_mutex_lock(&p->m->mt.sleep);
-	print_action(1, p);
+	print_action(SLEEPING, p);
 	usleep((useconds_t)(p->m->t.time2_sleep));
 	pthread_mutex_unlock(&p->m->mt.sleep);
 }	
@@ -43,10 +43,11 @@ int	eat(t_philos *p)
 		return (0);
 	if (pthread_mutex_lock(&p->m->mt.forks[p->l_fork]) != 0)
 		return (0);
+	print_action(FORK, p);
 	if (pthread_mutex_lock(&p->m->mt.forks[p->r_fork]) != 0)
 		return (0);
-	print_action(2, p);
-	print_action(3, p);
+	print_action(FORK, p);
+	print_action(EATING, p);
 	if (p->m->food_limit == 1)
 		p->eat_counter++;
 	usleep((useconds_t)(p->m->t.time2_eat));
@@ -58,7 +59,7 @@ int	eat(t_philos *p)
 void	think(t_philos *p)
 {	
 	pthread_mutex_lock(&p->m->mt.think);
-	print_action(4, p);
+	print_action(THINKING, p);
 	usleep((useconds_t)p->m->t.time2_sleep);
 	pthread_mutex_unlock(&p->m->mt.think);
 }
@@ -85,8 +86,8 @@ void	*routine(void *p_data)
 	pthread_mutex_lock(&p->m->mt.reaper);
 	if (p->m->ghost == 0)
 		p->m->ghost = (int)p->philo_id;
-	pthread_mutex_unlock(&p->m->mt.reaper);
 	if ((int)p->philo_id == p->m->ghost)
-		print_action(0, p);
+		print_action(DEAD, p);
+	pthread_mutex_unlock(&p->m->mt.reaper);
 	return (NULL);
 }

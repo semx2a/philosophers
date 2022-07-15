@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/13 16:11:44 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/15 17:59:51 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_philos
 	unsigned long	red_tape;
 	unsigned long	n_eats;
 	unsigned long	eat_counter;
+	unsigned long	timestamp;
 	struct s_main	*m;
 }	t_philos;
 
@@ -113,7 +114,7 @@ int				philosophers_join(t_main *m);
 
 //		philo_tools.c
 unsigned long	chrono(t_time *t);
-void			print_action(int i, t_philos *p);
+void			print_action(char *str, t_philos *p);
 void			ft_flush(t_main *m);
 
 //		philo_init.c

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/13 17:18:54 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/15 16:40:52 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		if (m->p[m->i].n_eats >= INT_MAX)
 			return (0);
 		m->p[m->i].eat_counter = 0;
+		m->p[m->i].timestamp = 0;
 		m->p[m->i].m = m;
 		m->i++;
 	}

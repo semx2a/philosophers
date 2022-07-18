@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/15 17:59:51 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/18 18:34:39 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,9 @@ int				philosophers_join(t_main *m);
 
 //		philo_tools.c
 unsigned long	chrono(t_time *t);
-void			print_action(char *str, t_philos *p);
+int				print_action(char *str, t_philos *p);
 void			ft_flush(t_main *m);
+int				ghost_buster(t_main *m);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);

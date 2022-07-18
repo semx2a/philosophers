@@ -6,18 +6,20 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/15 18:02:13 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/18 19:13:22 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	p_sleep(t_philos *p)
-{	
+int	p_sleep(t_philos *p)
+{
 	pthread_mutex_lock(&p->m->mt.sleep);
-	print_action(SLEEPING, p);
+	if (print_action(SLEEPING, p) == 0)
+		return (0);
 	usleep((useconds_t)(p->m->t.time2_sleep));
 	pthread_mutex_unlock(&p->m->mt.sleep);
+	return (1);
 }	
 
 int	is_full(t_philos *p)
@@ -37,17 +39,23 @@ int	is_full(t_philos *p)
 }
 
 int	eat(t_philos *p)
-{		
+{
 //	printf("philo == %lu : l_fork == %lu | r_fork == %lu\n", p->philo_id, p->l_fork, p->r_fork);
 	if (p->m->philo_nb == 1)
 		return (0);
 	if (pthread_mutex_lock(&p->m->mt.forks[p->l_fork]) != 0)
 		return (0);
-	print_action(FORK, p);
-	if (pthread_mutex_lock(&p->m->mt.forks[p->r_fork]) != 0)
+	if (print_action(FORK, p) == 0)
 		return (0);
-	print_action(FORK, p);
-	print_action(EATING, p);
+	if (pthread_mutex_lock(&p->m->mt.forks[p->r_fork]) != 0)
+	{
+		pthread_mutex_unlock(&p->m->mt.forks[p->l_fork]);
+		return (0);
+	}
+	if (print_action(FORK, p) == 0)
+		return (0);
+	if (print_action(EATING, p) == 0)
+		return (0);
 	if (p->m->food_limit == 1)
 		p->eat_counter++;
 	usleep((useconds_t)(p->m->t.time2_eat));
@@ -56,12 +64,14 @@ int	eat(t_philos *p)
 	return (1);
 }
 
-void	think(t_philos *p)
+int	think(t_philos *p)
 {	
 	pthread_mutex_lock(&p->m->mt.think);
-	print_action(THINKING, p);
+	if (print_action(THINKING, p) == 0)
+		return (0);
 	usleep((useconds_t)p->m->t.time2_sleep);
 	pthread_mutex_unlock(&p->m->mt.think);
+	return (1);
 }
 
 void	*routine(void *p_data)
@@ -70,24 +80,25 @@ void	*routine(void *p_data)
 
 	p = (t_philos *)p_data;
 	while (chrono(&p->m->t) < p->red_tape)
-	{
-		if (p->philo_id % 1 == 0)
-			usleep(200);
-		pthread_mutex_lock(&p->m->mt.reaper);
-		if (p->m->ghost != 0)
-			break ;
-		pthread_mutex_unlock(&p->m->mt.reaper);
+	{		
 		if (eat(p) == 1)
-			p_sleep(p);
-		if (!is_full(p))
-			return (NULL);
-		think(p);
+		{
+			if (p_sleep(p) == 0)
+				break ;
+			if (!is_full(p))
+				return (NULL);
+		}
+		else
+			if (think(p) == 0)
+				break ;
 	}
 	pthread_mutex_lock(&p->m->mt.reaper);
 	if (p->m->ghost == 0)
+	{
 		p->m->ghost = (int)p->philo_id;
-	if ((int)p->philo_id == p->m->ghost)
-		print_action(DEAD, p);
+		p->timestamp = chrono(&p->m->t);
+		printf(DEAD, p->timestamp, p->philo_id);
+	}
 	pthread_mutex_unlock(&p->m->mt.reaper);
 	return (NULL);
 }

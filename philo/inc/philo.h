@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/18 18:34:39 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/19 22:04:07 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@
 # define MAX_THREADS	1024
 
 //		MESSAGES
-# define DEAD			"%lu %lu died\n"
-# define EATING			"%lu %lu is eating\n"
-# define FORK			"%lu %lu has taken a fork\n"
-# define THINKING		"%lu %lu is thinking\n"
-# define SLEEPING		"%lu %lu is sleeping\n"
+# define DEAD			"%lu %lu \033[0;31mdied\033[0m\n"
+# define EATING			"%lu %lu is \033[0;33meating\033[0m\n"
+# define FORK			"%lu %lu has taken a \033[0;34mfork\033[0m\n"
+# define THINKING		"%lu %lu is \033[0;36mthinking\033[0m\n"
+# define SLEEPING		"%lu %lu is \033[0;35msleeping\033[0m\n"
 
 //		STRUCTURES
 //		unsigned long == time in usec
@@ -114,9 +114,10 @@ int				philosophers_join(t_main *m);
 
 //		philo_tools.c
 unsigned long	chrono(t_time *t);
-int				print_action(char *str, t_philos *p);
 void			ft_flush(t_main *m);
-int				ghost_buster(t_main *m);
+int				print_action(char *s, t_philos *p, pthread_mutex_t *m1,
+					pthread_mutex_t *m2);
+int				ghost_buster(t_philos *p, int alert);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);

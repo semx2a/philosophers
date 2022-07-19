@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/18 19:08:11 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/19 22:28:54 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,40 @@ unsigned long	chrono(t_time *t)
 	return ((unsigned long)(current - begin));
 }
 
-int	ghost_buster(t_main *m)
+int	ghost_buster(t_philos *p, int radar)
 {
-	pthread_mutex_lock(&m->mt.reaper);
-	if (m->ghost != 0)
+	pthread_mutex_lock(&p->m->mt.reaper);
+	if (p->m->ghost != 0)
+	{
+		pthread_mutex_unlock(&p->m->mt.reaper);
 		return (1);
-	pthread_mutex_unlock(&m->mt.reaper);
+	}
+	else if (!p->m->ghost && radar == 1)
+	{
+		p->m->ghost = (int)p->philo_id;
+		p->timestamp = chrono(&p->m->t);
+		printf(DEAD, p->timestamp, p->philo_id);
+		pthread_mutex_unlock(&p->m->mt.reaper);
+		return (1);
+	}
+	pthread_mutex_unlock(&p->m->mt.reaper);
 	return (0);
 }
 
-int	print_action(char *str, t_philos *p)
-{	
-	if (ghost_buster(p->m) == 1)
+int	print_action(char *s, t_philos *p, pthread_mutex_t *m1, pthread_mutex_t *m2)
+{
+	if (ghost_buster(p, 0))
+	{
+		pthread_mutex_unlock(m1);
+		if (m2 != NULL)
+			pthread_mutex_unlock(m2);
 		return (0);
+	}
 	pthread_mutex_lock(&p->m->mt.display);
 	p->timestamp = chrono(&p->m->t);
-	printf(str, p->timestamp, p->philo_id);
+	printf(s, p->timestamp, p->philo_id);
+	if (m2 != NULL)
+		printf(s, p->timestamp, p->philo_id);
 	pthread_mutex_unlock(&p->m->mt.display);
 	return (1);
 }

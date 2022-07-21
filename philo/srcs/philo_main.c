@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/12 21:33:17 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/21 18:05:55 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,9 @@ int	main(int ac, char **av)
 	if (!init_params(&m, ac, av))
 		return (0);
 	if (!philosophers_init(&m))
-	{
-		if (!philosophers_detach(&m))
-			ft_error(ERR);
-	}
-	else
-	{
-		if (!philosophers_join(&m))
-			return (0);
-	}
+		ft_error(ERR);
+	if (!philosophers_join(&m))
+		return (0);
 	ft_flush(&m);
 	return (0);
 }

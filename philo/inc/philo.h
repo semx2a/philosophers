@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/19 22:04:07 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/21 17:58:27 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@
 //		unsigned long == time in usec
 typedef struct s_time
 {
-	unsigned long	time2_die;
-	unsigned long	time2_eat;
-	unsigned long	time2_sleep;
 	struct timeval	start;
 	struct timeval	step;
 }	t_time;
@@ -82,10 +79,13 @@ typedef struct s_philos
 	unsigned long	philo_id;
 	unsigned long	r_fork;
 	unsigned long	l_fork;
-	unsigned long	red_tape;
-	unsigned long	n_eats;
-	unsigned long	eat_counter;
+	unsigned long	time2_die;
+	unsigned long	time2_eat;
+	unsigned long	time2_sleep;
 	unsigned long	timestamp;
+	unsigned long	n_eats;	
+	unsigned long	eat_counter;
+	int				food_limit;
 	struct s_main	*m;
 }	t_philos;
 
@@ -94,10 +94,9 @@ typedef struct s_main
 	size_t			i;
 	size_t			j;
 	int				*err;
-	int				food_limit;
 	int				ghost;
-	unsigned long	philo_nb;
 	unsigned long	done_eating;
+	unsigned long	philo_nb;
 	pthread_t		*philosophers;
 	t_philos		*p;
 	t_mutex			mt;

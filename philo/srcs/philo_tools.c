@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/19 22:28:54 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/21 18:56:08 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,13 @@ unsigned long	chrono(t_time *t)
 int	ghost_buster(t_philos *p, int radar)
 {
 	pthread_mutex_lock(&p->m->mt.reaper);
-	if (p->m->ghost != 0)
-	{
-		pthread_mutex_unlock(&p->m->mt.reaper);
-		return (1);
-	}
-	else if (!p->m->ghost && radar == 1)
+	if (!p->m->ghost && radar == 1)
 	{
 		p->m->ghost = (int)p->philo_id;
-		p->timestamp = chrono(&p->m->t);
-		printf(DEAD, p->timestamp, p->philo_id);
+		printf(DEAD, chrono(&p->m->t), p->philo_id);
+	}
+	else if (p->m->ghost != 0)
+	{
 		pthread_mutex_unlock(&p->m->mt.reaper);
 		return (1);
 	}

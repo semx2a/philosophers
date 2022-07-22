@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/21 17:59:07 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/22 21:10:01 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int	philos_alloc(t_main *m, int ac, char **av)
 	while (m->i < m->philo_nb)
 	{
 		m->p[m->i] = (t_philos){0};
-		m->p[m->i].r_fork = m->i + 1 % m->philo_nb;
 		m->p[m->i].l_fork = m->i ;
+		m->p[m->i].r_fork = m->i + 1;
 		if (m->i == m->philo_nb - 1)
 			m->p[m->i].r_fork = 0;
 		m->p[m->i].time2_die = (useconds_t)ft_atolu(av[2]);
@@ -76,13 +76,13 @@ int	philos_alloc(t_main *m, int ac, char **av)
 
 int	mutex_init(t_main *m)
 {
-	m->mt.forks = malloc(sizeof(pthread_mutex_t) * m->philo_nb);
-	if (!m->mt.forks)
+	m->mt.waiter = malloc(sizeof(pthread_mutex_t) * m->philo_nb);
+	if (!m->mt.waiter)
 		return (0);
 	m->i = 0;
 	while (m->i < m->philo_nb)
 	{
-		if (pthread_mutex_init(&m->mt.forks[m->i], NULL) != 0)
+		if (pthread_mutex_init(&m->mt.waiter[m->i], NULL) != 0)
 			return (0);
 		m->i++;
 	}

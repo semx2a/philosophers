@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/21 17:58:27 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/22 22:48:27 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@
 
 //		int/pointer cast
 # include <stdint.h>
+
+//		error numbers
+# include <errno.h>
 
 //		ERRORS
 # define ERR			"Error\n"
@@ -66,7 +69,7 @@ typedef struct s_time
 
 typedef struct s_mutex
 {
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	*waiter;
 	pthread_mutex_t	sleep;
 	pthread_mutex_t	think;
 	pthread_mutex_t	display;

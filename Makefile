@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/07/19 21:15:22 by seozcan          ###   ########.fr        #
+#    Updated: 2022/07/22 20:44:57 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,15 +105,34 @@ MINILIBX_PATH	= $(addprefix $(MDIR)/, ${MINILIBX})
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COLORS::
 
-BLUE			=	\033[1;34m
-CYAN			=	\033[0;36m
-GREEN			=	\033[0;92m
-BGREEN			=	\033[1;92m
-ORANGE 		 	=	\033[0;33m
 NO_COLOR		=	\033[m
+
+BLACK			=	\033[0;30m
+RED				=	\033[0;31m
+GREEN			=	\033[0;32m
+ORANGE 		 	=	\033[0;33m
+BLUE			=	\033[0;34m
 PURPLE			=	\033[0;35m
+CYAN			=	\033[0;36m
+WHITE			= 	\033[0;37m
+
+# High Intensty
+HIGREEN			=	\033[0;92m
+HIORANGE	 	=	\033[0;93m
+HIPURPLE		=	\033[0;95m
+
+# Bold
+BORANGE 		=	\033[1;33m
+BBLUE			=	\033[1;34m
 BPURPLE			=	\033[1;35m
 BCYAN			=	\033[1;36m
+
+# Bold High Intensity
+BHIGREEN		=	\033[1;92m
+BHIORANGE	 	=	\033[1;93m
+BHIPURPLE		=	\033[1;95m
+
+# Italic
 ICYAN			=	\033[3;36m
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::PARAMS::
@@ -145,18 +164,18 @@ vpath %.o $(ODIR)\
 all:			header lib h2 message $(NAME)
 
 $(ODIR)/%.o:	%.c 
-	@$(CC) $(WFLAGS) $(GFLAG) $(THREADS) $(INCLUDE_FLAGS) -c $< -o $@ 
-	@echo "$(GREEN)compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANTHREAD) $(THREADS) $(INCLUDE_FLAGS) -c $< -o $@ 
+	@echo "$(HIGREEN)compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(NAME):		$(OBJS)	
-	@$(CC) $(WFLAGS) $(GFLAG) $(THREADS) $(OBJS) -o $(NAME)
-	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[OK]$(NO_COLOR)"
+	@$(CC) $(WFLAGS) $(GFLAG) $(SANTHREAD) $(THREADS) $(OBJS) -o $(NAME)
+	@echo "$(HIGREEN)$(NAME) executable:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(OBJS):		| $(ODIR)
 
 $(ODIR):
 	@mkdir -p $(ODIR)
-	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(HIGREEN)objs folder:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::
 
@@ -164,17 +183,17 @@ bonus:			header lib h3 message_b $(BNAME)
 
 $(BODIR)/%.o:	%.c 
 	@$(CC) $(WFLAGS) $(GFLAG) $(INCLUDE_FLAGS) -c $< -o $@ 
-	@echo "$(GREEN)bonus compilation:\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(HIGREEN)bonus compilation:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(BNAME):		$(BOBJS)
 	@$(CC) $(WFLAGS) $(GFLAGS) $(SANFLAG) $(BOBJS) -o $(BNAME)
-	@echo "$(GREEN)bonus exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(HIGREEN)bonus exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 $(BOBJS):		| $(BODIR)
 
 $(BODIR):
 	@mkdir -p $(BODIR)
-	@echo "$(GREEN)objs_bonus folder:\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(HIGREEN)objs_bonus folder:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::RULES::
 
@@ -193,21 +212,21 @@ update:		header fclean
 	@git pull
 
 push:		header fclean
-	@echo "$(GREEN)"
+	@echo "$(HIGREEN)"
 	@git add .
 	@git commit --quiet
 	@git push --quiet
-	@echo "$(GREEN)git push:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(HIGREEN)git push:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 clean:		header
 	@rm -rf $(ODIR)
 	@rm -rf $(BODIR)
-	@echo "$(ORANGE)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
+	@echo "$(HIORANGE)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
 
 fclean:		header clean
 	@rm -f $(NAME)
 	@rm -f $(BNAME)
-	@echo "$(ORANGE)$(NAME) executable:\t\t\t\t\t[RM]$(NO_COLOR)"
+	@echo "$(HIORANGE)$(NAME) executable:\t\t\t\t\t[RM]$(NO_COLOR)"
 
 fcleanlib:	header fclean
 ifeq ($(IS_LIBFT),true)
@@ -221,7 +240,7 @@ ifeq ($(IS_MINILIBX),true)
 endif
 
 header:
-	@echo "$(BPURPLE)"
+	@echo "$(BHIPURPLE)"
 	@echo "   ______________________________________________________"
 	@echo "  /\     __________    ________    ___   ___    _______  \ "
 	@echo " /  \   /\         \  /\   __  \  /\  \ /\  \  /\  ____\  \ "
@@ -230,23 +249,23 @@ header:
 	@echo " \     \  \/__/  \/__/  \/__/ /__/  \/__/ \/__/  \/______/   \ "
 	@echo "  \     \_____________________________________________________\ "
 	@echo "   \    /                                                     / "
-	@echo "    \  /                   $(SCYAN) S E O Z C A N \$(NO_COLOR)$(BPURPLE)            ____   / "
+	@echo "    \  /                   $(CYAN) S E O Z C A N \$(NO_COLOR)$(BHIPURPLE)            ____   / "
 	@echo "     \/______________________________________________/\   \_/ "
 	@echo "                                                     \ \___\ "
 	@echo "                                                      \/___/ "
 	@echo "$(NO_COLOR)"
 
 h2:
-	@echo "\n$(BPURPLE):::::::::::::::::::::::::::::::::::::::::::::::::::::PHILO::\n$(NO_COLOR)"
+	@echo "\n$(BHIPURPLE):::::::::::::::::::::::::::::::::::::::::::::::::::::PHILO::\n$(NO_COLOR)"
 
 h3:
-	@echo "\n$(BPURPLE):::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::\n$(NO_COLOR)"
+	@echo "\n$(BHIPURPLE):::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::\n$(NO_COLOR)"
 
 message:
-	@make -q $(NAME) && echo "$(BGREEN)All files are already up to date$(NO_COLOR)" || true
+	@make -q $(NAME) && echo "$(BHIGREEN)All files are already up to date$(NO_COLOR)" || true
 
 message_b:
-	@make -q $(BNAME) && echo "$(BGREEN)All bonus files are already up to date$(NO_COLOR)" || true
+	@make -q $(BNAME) && echo "$(BHIGREEN)All bonus files are already up to date$(NO_COLOR)" || true
 
 re:		header fclean all 
 

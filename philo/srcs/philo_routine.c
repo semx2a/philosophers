@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/22 21:16:09 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/25 18:26:57 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	is_full(t_philos *p)
 {
+	if (ghost_buster(p, 0))
+		return (0);
 	if (p->food_limit == 1 && p->eat_counter >= p->n_eats)
 	{
 		if (pthread_mutex_lock(&p->m->mt.satiated) != 0)
@@ -30,25 +32,36 @@ int	is_full(t_philos *p)
 }
 
 int	p_sleep(t_philos *p)
-{
-	if (!print_action(SLEEPING, p, &p->m->mt.sleep, NULL))
+{	
+	if (ghost_buster(p, 0))
 		return (0);
+	print_action(SLEEPING, p, 1);
 	usleep((useconds_t)(p->time2_sleep));
 	return (1);
-}	
+}
+
+int	think(t_philos *p)
+{
+	if (ghost_buster(p, 0))
+		return (0);
+	print_action(THINKING, p, 1);
+	return (1);
+}
 
 int	eat(t_philos *p)
-{	
+{
+	if (ghost_buster(p, 0))
+		return (0);
 	if (p->m->philo_nb == 1)
 		return (0);
-	if (pthread_mutex_lock(&p->m->mt.waiter[p->l_fork]) != 0
-		|| pthread_mutex_lock(&p->m->mt.waiter[p->r_fork]) != 0)
+	pthread_mutex_lock(&p->m->mt.waiter[p->l_fork]);
+	pthread_mutex_lock(&p->m->mt.waiter[p->r_fork]);
+	if (!print_action(FORK, p, 2) || !print_action(EATING, p, 1))
+	{	
+		pthread_mutex_unlock(&p->m->mt.waiter[p->l_fork]);
+		pthread_mutex_unlock(&p->m->mt.waiter[p->r_fork]);
 		return (0);
-	if (!print_action(FORK, p, &p->m->mt.waiter[p->l_fork],
-			&p->m->mt.waiter[p->r_fork]))
-		return (0);
-	if (!print_action(EATING, p, &p->m->mt.waiter[p->l_fork], NULL))
-		return (0);
+	}
 	p->time2_die += chrono(&p->m->t);
 	if (p->food_limit == 1)
 		p->eat_counter++;
@@ -63,17 +76,16 @@ void	*routine(void *p_data)
 	t_philos	*p;
 
 	p = (t_philos *)p_data;
-	while (!ghost_buster(p, 0) && chrono(&p->m->t) < p->time2_die)
-	{	
+	while (1)
+	{
 		if (!eat(p))
 			break ;
 		if (!is_full(p))
 			return (NULL);
 		if (!p_sleep(p))
 			break ;
-		if (!print_action(THINKING, p, &p->m->mt.think, NULL))
+		if (!think(p))
 			break ;
 	}
-	ghost_buster(p, 1);
 	return (NULL);
 }

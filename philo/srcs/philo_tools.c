@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/22 18:53:12 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/25 18:00:04 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,18 @@ int	ghost_buster(t_philos *p, int radar)
 	return (0);
 }
 
-int	print_action(char *s, t_philos *p, pthread_mutex_t *m1, pthread_mutex_t *m2)
+int	print_action(char *s, t_philos *p, int items)
 {
-	if (ghost_buster(p, 0))
-	{
-		pthread_mutex_unlock(m1);
-		if (m2 != NULL)
-			pthread_mutex_unlock(m2);
-		return (0);
-	}
 	pthread_mutex_lock(&p->m->mt.display);
 	p->timestamp = chrono(&p->m->t);
+	if (p->timestamp > p->time2_die)
+	{
+		pthread_mutex_unlock(&p->m->mt.display);
+		ghost_buster(p, 1);
+		return (0);
+	}
 	printf(s, p->timestamp, p->philo_id);
-	if (m2 != NULL)
+	if (items == 2)
 		printf(s, p->timestamp, p->philo_id);
 	pthread_mutex_unlock(&p->m->mt.display);
 	return (1);
@@ -66,8 +65,6 @@ void	ft_flush(t_main *m)
 		pthread_mutex_destroy(&m->mt.waiter[m->i]);
 		m->i++;
 	}
-	pthread_mutex_destroy(&m->mt.sleep);
-	pthread_mutex_destroy(&m->mt.think);
 	pthread_mutex_destroy(&m->mt.satiated);
 	pthread_mutex_destroy(&m->mt.display);
 	pthread_mutex_destroy(&m->mt.reaper);

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/25 18:26:57 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/26 17:49:41 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ int	is_full(t_philos *p)
 		return (0);
 	if (p->food_limit == 1 && p->eat_counter >= p->n_eats)
 	{
-		if (pthread_mutex_lock(&p->m->mt.satiated) != 0)
-			return (0);
+		pthread_mutex_lock(&p->m->mt.satiated);
 		p->m->done_eating += 1;
 		if (p->m->done_eating >= p->m->philo_nb)
 		{
@@ -44,6 +43,8 @@ int	think(t_philos *p)
 {
 	if (ghost_buster(p, 0))
 		return (0);
+	if (p->philo_id % 1 == 0)
+		usleep(p->time2_sleep / 2 + 1);
 	print_action(THINKING, p, 1);
 	return (1);
 }
@@ -76,6 +77,8 @@ void	*routine(void *p_data)
 	t_philos	*p;
 
 	p = (t_philos *)p_data;
+	while (!read_data(p->m->mt.display, &p->m->start))
+		usleep(50);
 	while (1)
 	{
 		if (!eat(p))

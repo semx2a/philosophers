@@ -6,13 +6,13 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/25 18:00:04 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/26 17:16:00 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-unsigned long	chrono(t_time *t)
+unsigned int	chrono(t_time *t)
 {
 	long	current;
 	long	begin;
@@ -20,7 +20,7 @@ unsigned long	chrono(t_time *t)
 	gettimeofday(&t->step, NULL);
 	current = (t->step.tv_sec * 1000) + (t->step.tv_usec / 1000);
 	begin = (t->start.tv_sec * 1000) + (t->start.tv_usec / 1000);
-	return ((unsigned long)(current - begin));
+	return ((unsigned)(current - begin));
 }
 
 int	ghost_buster(t_philos *p, int radar)
@@ -42,14 +42,13 @@ int	ghost_buster(t_philos *p, int radar)
 
 int	print_action(char *s, t_philos *p, int items)
 {
-	pthread_mutex_lock(&p->m->mt.display);
 	p->timestamp = chrono(&p->m->t);
 	if (p->timestamp > p->time2_die)
 	{
-		pthread_mutex_unlock(&p->m->mt.display);
 		ghost_buster(p, 1);
 		return (0);
 	}
+	pthread_mutex_lock(&p->m->mt.display);
 	printf(s, p->timestamp, p->philo_id);
 	if (items == 2)
 		printf(s, p->timestamp, p->philo_id);

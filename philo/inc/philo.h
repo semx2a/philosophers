@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/26 17:25:21 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/27 19:28:38 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,11 +116,11 @@ int				philosophers_join(t_main *m);
 unsigned int	chrono(t_time *t);
 void			ft_flush(t_main *m);
 int				print_action(char *s, t_philos *p, int items);
-int				ghost_buster(t_philos *p, int alert);
+int				ghost_buster(t_philos *p);
 
 //		philo_mutexes.c
-int				read_data(pthread_mutex_t mu, void *data);
-void			write_data(pthread_mutex_t mu, void *data, int value);
+int				read_data(pthread_mutex_t mu, int data);
+void			write_data(pthread_mutex_t mu, int *data, int value);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);

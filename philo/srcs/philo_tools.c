@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/26 17:16:00 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/27 19:21:15 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ unsigned int	chrono(t_time *t)
 	return ((unsigned)(current - begin));
 }
 
-int	ghost_buster(t_philos *p, int radar)
+int	ghost_buster(t_philos *p)
 {
 	pthread_mutex_lock(&p->m->mt.reaper);
-	if (!p->m->ghost && radar == 1)
+	if (!p->m->ghost && p->timestamp > p->time2_die)
 	{
 		p->m->ghost = (int)p->philo_id;
 		printf(DEAD, chrono(&p->m->t), p->philo_id);
@@ -43,11 +43,8 @@ int	ghost_buster(t_philos *p, int radar)
 int	print_action(char *s, t_philos *p, int items)
 {
 	p->timestamp = chrono(&p->m->t);
-	if (p->timestamp > p->time2_die)
-	{
-		ghost_buster(p, 1);
+	if (ghost_buster(p) == 1)
 		return (0);
-	}
 	pthread_mutex_lock(&p->m->mt.display);
 	printf(s, p->timestamp, p->philo_id);
 	if (items == 2)

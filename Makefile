@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/07/26 16:51:01 by seozcan          ###   ########.fr        #
+#    Updated: 2022/07/27 18:55:25 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,8 @@ GFLAG			:= -g3
 SANFLAG			:= -fsanitize=address
 
 SANTHREAD		:= -fsanitize=thread
+
+TSAN_OPTIONS	=second_deadlock_stack=1
 
 THREADS			:= -pthread
 

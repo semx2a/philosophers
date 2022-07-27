@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/27 19:29:50 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/27 20:19:53 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,16 @@ int	eat(t_philos *p)
 {
 	if (p->m->philo_nb == 1)
 		return (0);
-	pthread_mutex_lock(&p->m->mt.waiter[p->l_fork]);
-	pthread_mutex_lock(&p->m->mt.waiter[p->r_fork]);
+	if (p->r_fork > p->l_fork)
+	{
+		pthread_mutex_lock(&p->m->mt.waiter[p->r_fork]);
+		pthread_mutex_lock(&p->m->mt.waiter[p->l_fork]);
+	}
+	else
+	{
+		pthread_mutex_lock(&p->m->mt.waiter[p->l_fork]);
+		pthread_mutex_lock(&p->m->mt.waiter[p->r_fork]);
+	}
 	if (!print_action(FORK, p, 2) || !print_action(EATING, p, 1))
 	{	
 		pthread_mutex_unlock(&p->m->mt.waiter[p->l_fork]);

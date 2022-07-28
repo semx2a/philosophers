@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/27 19:28:38 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/28 18:58:17 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,20 @@ int				philosophers_init(t_main *m);
 int				philosophers_join(t_main *m);
 
 //		philo_tools.c
-unsigned int	chrono(t_time *t);
+void			waiter(t_philos *p, int (*f)(pthread_mutex_t *));
 void			ft_flush(t_main *m);
 int				print_action(char *s, t_philos *p, int items);
 int				ghost_buster(t_philos *p);
 
 //		philo_mutexes.c
-int				read_data(pthread_mutex_t mu, int data);
-void			write_data(pthread_mutex_t mu, int *data, int value);
+int				read_data(pthread_mutex_t *mu, int *data);
+void			write_data(pthread_mutex_t *mu, int *data, int value);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);
 
 //		philo_utils.c
+unsigned int	chrono(t_time *t);
 int				ft_isdigit(int c);
 int				ft_atoi(const char *str);
 size_t			ft_strlen(const char *str);

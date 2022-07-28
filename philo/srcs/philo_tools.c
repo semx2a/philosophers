@@ -6,21 +6,24 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/27 19:21:15 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/28 20:02:17 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-unsigned int	chrono(t_time *t)
-{
-	long	current;
-	long	begin;
-
-	gettimeofday(&t->step, NULL);
-	current = (t->step.tv_sec * 1000) + (t->step.tv_usec / 1000);
-	begin = (t->start.tv_sec * 1000) + (t->start.tv_usec / 1000);
-	return ((unsigned)(current - begin));
+void	waiter(t_philos *p, int (*f)(pthread_mutex_t *))
+{	
+	if (p->l_fork < p->r_fork)
+	{
+		f(&p->m->mt.waiter[p->r_fork]);
+		f(&p->m->mt.waiter[p->l_fork]);
+	}
+	else
+	{
+		f(&p->m->mt.waiter[p->l_fork]);
+		f(&p->m->mt.waiter[p->r_fork]);
+	}
 }
 
 int	ghost_buster(t_philos *p)

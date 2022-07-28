@@ -6,11 +6,22 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:34 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/26 16:17:04 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/28 16:16:17 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+unsigned int	chrono(t_time *t)
+{
+	long	current;
+	long	begin;
+
+	gettimeofday(&t->step, NULL);
+	current = (t->step.tv_sec * 1000) + (t->step.tv_usec / 1000);
+	begin = (t->start.tv_sec * 1000) + (t->start.tv_usec / 1000);
+	return ((unsigned)(current - begin));
+}
 
 int	ft_isdigit(int c)
 {

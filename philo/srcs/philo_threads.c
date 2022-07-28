@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/27 20:17:32 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/28 18:56:56 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	philosophers_init(t_main *m)
 		}
 		m->i++;
 	}
-//	write_data(m->mt.display, &m->start, 1);
+	write_data(&m->mt.display, &m->start, 1);
 	return (1);
 }
 

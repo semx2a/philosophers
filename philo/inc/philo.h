@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/28 18:58:17 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/29 16:32:50 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ typedef struct s_philos
 
 typedef struct s_main
 {
-	size_t		i;
-	size_t		j;
-	size_t		philo_nb;
-	size_t		done_eating;
+	int			i;
+	int			j;
+	int			philo_nb;
+	int			done_eating;
 	int			*err;
 	int			start;
 	int			ghost;
@@ -113,14 +113,15 @@ int				philosophers_init(t_main *m);
 int				philosophers_join(t_main *m);
 
 //		philo_tools.c
-void			waiter(t_philos *p, int (*f)(pthread_mutex_t *));
-void			ft_flush(t_main *m);
-int				print_action(char *s, t_philos *p, int items);
+int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
+int				print_action(t_philos *p, char *str);
 int				ghost_buster(t_philos *p);
+void			ft_flush(t_main *m);
 
 //		philo_mutexes.c
 int				read_data(pthread_mutex_t *mu, int *data);
-void			write_data(pthread_mutex_t *mu, int *data, int value);
+void			write_data(pthread_mutex_t *mu, int *data, int value,
+					char instruction);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);

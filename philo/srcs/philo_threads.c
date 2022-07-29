@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/28 18:56:56 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/29 16:34:00 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	philosophers_init(t_main *m)
 	m->i = 0;
 	while (m->i < m->philo_nb)
 	{	
-		m->p[m->i].philo_id = (int)m->i + 1;
+		m->p[m->i].philo_id = m->i + 1;
 		m->err[m->i] = pthread_create(&m->philosophers[m->i], NULL,
 				&routine, &m->p[m->i]);
 		if (m->err[m->i] != 0)
@@ -27,13 +27,13 @@ int	philosophers_init(t_main *m)
 		}
 		m->i++;
 	}
-	write_data(&m->mt.display, &m->start, 1);
+	write_data(&m->mt.display, &m->start, 1, 0);
 	return (1);
 }
 
 int	philosophers_join(t_main *m)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
 	while (i < m->philo_nb)

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/28 18:22:50 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/29 16:32:25 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@ int	read_data(pthread_mutex_t *mu, int *data)
 	return (ret);
 }
 
-void	write_data(pthread_mutex_t *mu, int *data, int value)
+void	write_data(pthread_mutex_t *mu, int *data, int value, char instruction)
 {
 	pthread_mutex_lock(mu);
-	*(data) = value;
+	if (instruction == '+')
+		*(data) += value;
+	else
+		*(data) = value;
 	pthread_mutex_unlock(mu);
 }

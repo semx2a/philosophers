@@ -6,53 +6,64 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/28 20:02:17 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/07/29 16:57:48 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	waiter(t_philos *p, int (*f)(pthread_mutex_t *))
-{	
-	if (p->l_fork < p->r_fork)
-	{
-		f(&p->m->mt.waiter[p->r_fork]);
-		f(&p->m->mt.waiter[p->l_fork]);
-	}
-	else
-	{
-		f(&p->m->mt.waiter[p->l_fork]);
-		f(&p->m->mt.waiter[p->r_fork]);
-	}
-}
-
 int	ghost_buster(t_philos *p)
 {
-	pthread_mutex_lock(&p->m->mt.reaper);
-	if (!p->m->ghost && p->timestamp > p->time2_die)
+	if (!read_data(&p->m->mt.reaper, &p->m->ghost)
+		&& p->timestamp > p->time2_die)
 	{
-		p->m->ghost = (int)p->philo_id;
-		printf(DEAD, chrono(&p->m->t), p->philo_id);
-	}
-	else if (p->m->ghost != 0)
-	{
-		pthread_mutex_unlock(&p->m->mt.reaper);
+		write_data(&p->m->mt.reaper, &p->m->ghost, (int)p->philo_id, 0);
+		pthread_mutex_lock(&p->m->mt.display);
+		printf(DEAD, p->timestamp, p->philo_id);
+		pthread_mutex_unlock(&p->m->mt.display);
 		return (1);
 	}
-	pthread_mutex_unlock(&p->m->mt.reaper);
+	else if (read_data(&p->m->mt.reaper, &p->m->ghost) != 0)
+		return (1);
 	return (0);
 }
 
-int	print_action(char *s, t_philos *p, int items)
+int	print_action(t_philos *p, char *str)
 {
 	p->timestamp = chrono(&p->m->t);
-	if (ghost_buster(p) == 1)
+	if (ghost_buster(p))
 		return (0);
 	pthread_mutex_lock(&p->m->mt.display);
-	printf(s, p->timestamp, p->philo_id);
-	if (items == 2)
-		printf(s, p->timestamp, p->philo_id);
+	printf(str, p->timestamp, p->philo_id);
 	pthread_mutex_unlock(&p->m->mt.display);
+	return (1);
+}
+
+int	service(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int fork)
+{
+	f(&p->m->mt.waiter[fork]);
+	if (str != NULL)
+		if (!print_action(p, str))
+			return (0);
+	return (1);
+}
+
+int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
+{
+	if (p->l_fork < p->r_fork)
+	{
+		if (!service(p, f, str, p->l_fork))
+			return (0);
+		if (!service(p, f, str, p->r_fork))
+			return (0);
+	}
+	else
+	{
+		if (!service(p, f, str, p->r_fork))
+			return (0);
+		if (!service(p, f, str, p->l_fork))
+			return (0);
+	}
 	return (1);
 }
 

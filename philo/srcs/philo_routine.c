@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 19:53:15 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 21:10:19 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_full(t_philos *p)
 {	
 	p->eat_counter++;
-	printf("philo %d ate %d times\n", p->philo_id, p->eat_counter);
+//	printf("philo %d ate %d times\n", p->philo_id, p->eat_counter);
 	if (p->eat_counter == p->n_eats)
 	{
 		write_data(&p->m->mt.satiated, &p->m->done_eating, 1, '+');

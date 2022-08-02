@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 19:50:12 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 21:09:54 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	print_action(t_philos *p, char *str)
 	if (ghost_buster(p))
 		return (0);
 	pthread_mutex_lock(&p->m->mt.display);
-//	printf(str, p->timestamp, p->philo_id);
+	printf(str, p->timestamp, p->philo_id);
 	pthread_mutex_unlock(&p->m->mt.display);
 	return (1);
 }

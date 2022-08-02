@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 21:10:19 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 21:33:05 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	*routine(void *p_data)
 	p = (t_philos *)p_data;
 	while (!read_data(&p->m->mt.display, &p->m->start))
 		usleep(50);
-	p->time2_die += chrono(p->m->bigbang);
+	p->expected_death = chrono(p->m->bigbang) + p->time2_die;
 	if (p->philo_id % 2 == 0)
 		usleep(p->time2_eat / 2);
 	while (!ghost_buster(p))

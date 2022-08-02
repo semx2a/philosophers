@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/21 18:05:55 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 19:46:17 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	main(int ac, char **av)
 
 	m = (t_main){0};
 	m.mt = (t_mutex){0};
-	m.t = (t_time){0};
 	if (ac < 5 || ac > 6)
 	{
 		ft_error(ERR_ARGS);

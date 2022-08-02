@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/29 16:30:43 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 19:46:41 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,36 +41,36 @@ int	main_alloc(t_main *m, char **av)
 			* (long unsigned)m->philo_nb);
 	if (!m->philosophers)
 		return (0);
-	m->err = (int *)malloc(sizeof(int)
-			* (long unsigned)m->philo_nb);
+	m->err = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
 	return (1);
 }
 
 int	philos_alloc(t_main *m, int ac, char **av)
-{
+{	
 	m->p = malloc(sizeof(t_philos) * (long unsigned)m->philo_nb);
 	if (!m->p)
 		return (0);
 	while (m->i < m->philo_nb)
 	{
 		m->p[m->i] = (t_philos){0};
-		m->p[m->i].l_fork = (int)m->i ;
-		m->p[m->i].r_fork = (int)m->i + 1;
-		if (m->i == m->philo_nb - 1)
-			m->p[m->i].r_fork = 0;
+		m->p[m->i].l_fork = m->i;
+		m->p[m->i].r_fork = m->i + 1;
 		m->p[m->i].time2_die = (unsigned)ft_atoi(av[2]);
+		m->p[m->i].expected_death = m->p[m->i].time2_die;
 		m->p[m->i].time2_eat = (unsigned)ft_atoi(av[3]) * 1000;
 		m->p[m->i].time2_sleep = (unsigned)ft_atoi(av[4]) * 1000;
 		if (ac == 6)
 		{
 			m->p[m->i].n_eats = ft_atoi(av[5]);
+			if (m->p[m->i].n_eats >= INT_MAX)
+				return (0);
 			m->p[m->i].food_limit = 1;
 		}
-		if (m->p[m->i].n_eats >= INT_MAX)
-			return (0);
 		m->p[m->i].m = m;
 		m->i++;
 	}
+	m->p[m->i - 1].l_fork = 0;
+	m->p[m->i - 1].r_fork = m->i;
 	return (1);
 }
 
@@ -117,6 +117,5 @@ int	init_params(t_main *m, int ac, char **av)
 		ft_error(ERR_MUTEX);
 		return (0);
 	}
-	gettimeofday(&m->t.start, NULL);
 	return (1);
 }

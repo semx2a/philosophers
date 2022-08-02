@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/29 16:32:50 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 19:08:04 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,6 @@
 
 //		STRUCTURES
 //		unsigned long == time in usec
-typedef struct s_time
-{
-	struct timeval	start;
-	struct timeval	step;
-}	t_time;
 
 typedef struct s_mutex
 {
@@ -83,7 +78,9 @@ typedef struct s_philos
 	int				n_eats;	
 	int				eat_counter;
 	int				food_limit;
+	int				err;
 	unsigned int	time2_die;
+	unsigned int	expected_death;
 	unsigned int	time2_eat;
 	unsigned int	time2_sleep;
 	unsigned int	timestamp;
@@ -92,17 +89,17 @@ typedef struct s_philos
 
 typedef struct s_main
 {
-	int			i;
-	int			j;
-	int			philo_nb;
-	int			done_eating;
-	int			*err;
-	int			start;
-	int			ghost;
-	pthread_t	*philosophers;
-	t_philos	*p;
-	t_mutex		mt;
-	t_time		t;
+	int				i;
+	int				j;
+	int				philo_nb;
+	int				*err;
+	int				start;
+	int				ghost;
+	int				done_eating;
+	pthread_t		*philosophers;
+	struct timeval	bigbang;
+	t_philos		*p;
+	t_mutex			mt;
 }	t_main;
 
 //		philo_routine.c
@@ -110,10 +107,10 @@ void			*routine(void *p_data);
 
 //		philo_threads.c
 int				philosophers_init(t_main *m);
+int				philosophers_detach(t_main *m);
 int				philosophers_join(t_main *m);
 
 //		philo_tools.c
-int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
 int				print_action(t_philos *p, char *str);
 int				ghost_buster(t_philos *p);
 void			ft_flush(t_main *m);
@@ -122,12 +119,13 @@ void			ft_flush(t_main *m);
 int				read_data(pthread_mutex_t *mu, int *data);
 void			write_data(pthread_mutex_t *mu, int *data, int value,
 					char instruction);
+int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
 
 //		philo_init.c
 int				init_params(t_main *m, int ac, char **av);
 
 //		philo_utils.c
-unsigned int	chrono(t_time *t);
+unsigned int	chrono(struct timeval bigbang);
 int				ft_isdigit(int c);
 int				ft_atoi(const char *str);
 size_t			ft_strlen(const char *str);

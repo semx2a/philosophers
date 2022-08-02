@@ -6,20 +6,21 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:34 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/28 16:16:17 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 19:25:31 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-unsigned int	chrono(t_time *t)
+unsigned int	chrono(struct timeval bigbang)
 {
-	long	current;
-	long	begin;
+	struct timeval	crt_time;
+	long			current;
+	long			begin;
 
-	gettimeofday(&t->step, NULL);
-	current = (t->step.tv_sec * 1000) + (t->step.tv_usec / 1000);
-	begin = (t->start.tv_sec * 1000) + (t->start.tv_usec / 1000);
+	gettimeofday(&crt_time, NULL);
+	current = (crt_time.tv_sec * 1000) + (crt_time.tv_usec / 1000);
+	begin = (bigbang.tv_sec * 1000) + (bigbang.tv_usec / 1000);
 	return ((unsigned)(current - begin));
 }
 

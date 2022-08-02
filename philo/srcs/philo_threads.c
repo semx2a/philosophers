@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/29 16:34:00 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 19:46:23 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	philosophers_init(t_main *m)
 {
 	m->i = 0;
+	gettimeofday(&m->bigbang, NULL);
 	while (m->i < m->philo_nb)
 	{	
 		m->p[m->i].philo_id = m->i + 1;

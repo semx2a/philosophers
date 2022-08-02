@@ -1,14 +1,13 @@
-5 800 200 200		no death
-5 800 200 200 7		no death
-4 410 200 200		no death
-3 610 200 100		no death
-7 610 200 100		no death
-200 2200 200 200	no death
-200 410 200 200		no death
-4 400 200 200		no death	
+5 800 200 200		no death OK
+5 800 200 200 7		no death OK
+4 410 200 200		no death OK
+3 610 200 100		no death OK
+7 610 200 100		no death OK
+200 2200 200 200	no death OK
+200 410 200 200		no death OK
+4 400 200 200		no death NOK
 
-1 800 200 200		should die
-4 310 200 200		should die
-2 310 200 200		should die
-200 310 200 100		should die
-
+1 800 200 200		should die NOK
+4 310 200 200		should die OK
+2 310 200 200		should die OK
+200 310 200 100		should die OK

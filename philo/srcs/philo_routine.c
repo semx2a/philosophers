@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/07/29 16:48:32 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/02 19:53:15 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 int	is_full(t_philos *p)
 {	
 	p->eat_counter++;
-	if (p->food_limit == 1 && p->eat_counter >= p->n_eats)
+	printf("philo %d ate %d times\n", p->philo_id, p->eat_counter);
+	if (p->eat_counter == p->n_eats)
 	{
 		write_data(&p->m->mt.satiated, &p->m->done_eating, 1, '+');
-		if (read_data(&p->m->mt.satiated, &p->m->done_eating) >= p->m->philo_nb)
-			return (0);
 	}
+	if (read_data(&p->m->mt.satiated, &p->m->done_eating)
+		== read_data(&p->m->mt.satiated, &p->m->philo_nb))
+		return (0);
 	return (1);
 }
 
@@ -28,7 +30,7 @@ int	p_sleep(t_philos *p)
 {	
 	if (!print_action(p, SLEEPING))
 		return (0);
-	usleep((useconds_t)(p->time2_sleep));
+	usleep(p->time2_sleep);
 	return (1);
 }
 
@@ -41,15 +43,20 @@ int	think(t_philos *p)
 
 int	eat(t_philos *p)
 {
-	if (!waiter(p, &pthread_mutex_lock, FORK))
+	p->err = waiter(p, &pthread_mutex_lock, FORK);
+	if (p->err == -1 || p->err == 0)
+	{
+		if (p->err == 0)
+			waiter(p, &pthread_mutex_unlock, NULL);
 		return (0);
+	}
 	if (!print_action(p, EATING))
 	{
 		waiter(p, &pthread_mutex_unlock, NULL);
 		return (0);
 	}
-	p->time2_die += chrono(&p->m->t);
-	usleep((useconds_t)(p->time2_eat));
+	p->expected_death = p->timestamp + p->time2_die;
+	usleep(p->time2_eat);
 	waiter(p, &pthread_mutex_unlock, NULL);
 	if (p->food_limit == 1 && !is_full(p))
 		return (0);
@@ -65,7 +72,7 @@ void	*routine(void *p_data)
 	p = (t_philos *)p_data;
 	while (!read_data(&p->m->mt.display, &p->m->start))
 		usleep(50);
-	p->time2_die += chrono(&p->m->t);
+	p->time2_die += chrono(p->m->bigbang);
 	if (p->philo_id % 2 == 0)
 		usleep(p->time2_eat / 2);
 	while (!ghost_buster(p))

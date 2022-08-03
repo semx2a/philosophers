@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 17:48:33 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 17:49:46 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ghost_buster(t_philos *p)
 {
 	if (!read_data(&p->m->mt.reaper, &p->m->ghost)
-		&& chrono(&p->m->bigbang) > p->expected_death)
+		&& chrono(p->m->bigbang) > p->expected_death)
 	{
 		write_data(&p->m->mt.reaper, &p->m->ghost, (int)p->philo_id, 0);
 		pthread_mutex_lock(&p->m->mt.display);

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 21:33:08 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 19:00:19 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@
 typedef struct s_mutex
 {
 	pthread_mutex_t	*waiter;
+	pthread_mutex_t	hand;
 	pthread_mutex_t	display;
 	pthread_mutex_t	satiated;
 	pthread_mutex_t	reaper;
@@ -83,6 +84,7 @@ typedef struct s_philos
 	unsigned int	expected_death;
 	unsigned int	time2_eat;
 	unsigned int	time2_sleep;
+	unsigned int	offset;
 	unsigned int	timestamp;
 	struct s_main	*m;
 }	t_philos;
@@ -96,6 +98,7 @@ typedef struct s_main
 	int				start;
 	int				ghost;
 	int				done_eating;
+	int				*platter;
 	pthread_t		*philosophers;
 	struct timeval	bigbang;
 	t_philos		*p;
@@ -111,6 +114,7 @@ int				philosophers_detach(t_main *m);
 int				philosophers_join(t_main *m);
 
 //		philo_tools.c
+unsigned int	chrono(struct timeval bigbang);
 int				print_action(t_philos *p, char *str);
 int				ghost_buster(t_philos *p);
 void			ft_flush(t_main *m);
@@ -125,7 +129,6 @@ int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
 int				init_params(t_main *m, int ac, char **av);
 
 //		philo_utils.c
-unsigned int	chrono(struct timeval bigbang);
 int				ft_isdigit(int c);
 int				ft_atoi(const char *str);
 size_t			ft_strlen(const char *str);

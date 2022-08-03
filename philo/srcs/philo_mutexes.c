@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 17:36:17 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 18:33:08 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,13 @@ int	service(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int fork)
 {
 	f(&p->m->mt.waiter[fork]);
 	if (str != NULL)
+	{
+		write_data(&p->m->mt.hand, &p->m->platter[fork], 1, 0);
 		if (!print_action(p, str))
 			return (0);
+	}
+	else
+		write_data(&p->m->mt.hand, &p->m->platter[fork], 0, 0);
 	return (1);
 }
 

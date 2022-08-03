@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 17:36:51 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 19:01:58 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,20 @@ int	main_alloc(t_main *m, char **av)
 	if (!m->philosophers)
 		return (0);
 	m->err = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
+	if (!m->err)
+		return (0);
+	m->p = (t_philos *)malloc(sizeof(t_philos) * (long unsigned)m->philo_nb);
+	if (!m->p)
+		return (0);
+	m->platter = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
+	if (!m->platter)
+		return (0);
+	memset(m->platter, 0, (long unsigned)m->philo_nb);
 	return (1);
 }
 
 int	philos_alloc(t_main *m, int ac, char **av)
 {	
-	m->p = malloc(sizeof(t_philos) * (long unsigned)m->philo_nb);
-	if (!m->p)
-		return (0);
 	while (m->i < m->philo_nb)
 	{
 		m->p[m->i] = (t_philos){0};
@@ -62,6 +68,7 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		m->p[m->i].expected_death = m->p[m->i].time2_die;
 		m->p[m->i].time2_eat = (unsigned)ft_atoi(av[3]) * 1000;
 		m->p[m->i].time2_sleep = (unsigned)ft_atoi(av[4]) * 1000;
+		m->p[m->i].offset = m->p[m->i].time2_sleep / (unsigned int)m->philo_nb;
 		if (ac == 6)
 		{
 			m->p[m->i].n_eats = ft_atoi(av[5]);
@@ -92,6 +99,8 @@ int	mutex_init(t_main *m)
 	if (pthread_mutex_init(&m->mt.satiated, NULL) != 0)
 		return (0);
 	if (pthread_mutex_init(&m->mt.reaper, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.hand, NULL) != 0)
 		return (0);
 	return (1);
 }

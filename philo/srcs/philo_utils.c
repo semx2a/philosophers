@@ -6,23 +6,11 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:34 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 19:25:31 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 18:14:31 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-unsigned int	chrono(struct timeval bigbang)
-{
-	struct timeval	crt_time;
-	long			current;
-	long			begin;
-
-	gettimeofday(&crt_time, NULL);
-	current = (crt_time.tv_sec * 1000) + (crt_time.tv_usec / 1000);
-	begin = (bigbang.tv_sec * 1000) + (bigbang.tv_usec / 1000);
-	return ((unsigned)(current - begin));
-}
 
 int	ft_isdigit(int c)
 {

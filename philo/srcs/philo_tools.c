@@ -6,16 +6,27 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 17:49:46 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 18:55:42 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	ghost_buster(t_philos *p)
+unsigned int	chrono(struct timeval bigbang)
 {
-	if (!read_data(&p->m->mt.reaper, &p->m->ghost)
-		&& chrono(p->m->bigbang) > p->expected_death)
+	struct timeval	crt_time;
+
+	gettimeofday(&crt_time, NULL);
+	return ((unsigned)(((crt_time.tv_sec * 1000) + (crt_time.tv_usec / 1000))
+		- ((bigbang.tv_sec * 1000) + (bigbang.tv_usec / 1000))));
+}
+
+int	ghost_buster(t_philos *p)
+{	
+	if (read_data(&p->m->mt.reaper, &p->m->ghost) != 0)
+		return (1);
+	else if (!read_data(&p->m->mt.reaper, &p->m->ghost)
+		&& p->timestamp > p->expected_death)
 	{
 		write_data(&p->m->mt.reaper, &p->m->ghost, (int)p->philo_id, 0);
 		pthread_mutex_lock(&p->m->mt.display);
@@ -23,18 +34,15 @@ int	ghost_buster(t_philos *p)
 		pthread_mutex_unlock(&p->m->mt.display);
 		return (1);
 	}
-	else if (read_data(&p->m->mt.reaper, &p->m->ghost) != 0)
-		return (1);
 	return (0);
 }
 
 int	print_action(t_philos *p, char *str)
-{
-	(void)str;
+{	
+	p->timestamp = chrono(p->m->bigbang);
 	if (ghost_buster(p))
 		return (0);
 	pthread_mutex_lock(&p->m->mt.display);
-	p->timestamp = chrono(p->m->bigbang);
 	printf(str, p->timestamp, p->philo_id);
 	pthread_mutex_unlock(&p->m->mt.display);
 	return (1);

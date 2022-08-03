@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 19:46:23 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 17:34:53 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	philosophers_init(t_main *m)
 	gettimeofday(&m->bigbang, NULL);
 	while (m->i < m->philo_nb)
 	{	
-		m->p[m->i].philo_id = m->i + 1;
 		m->err[m->i] = pthread_create(&m->philosophers[m->i], NULL,
 				&routine, &m->p[m->i]);
 		if (m->err[m->i] != 0)

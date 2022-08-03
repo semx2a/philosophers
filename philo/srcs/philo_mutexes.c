@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 19:46:46 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/03 17:36:17 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,25 @@ int	service(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int fork)
 
 int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
 {
-	if (!service(p, f, str, p->l_fork))
+	if (p->l_fork < p->r_fork)
 	{
-		pthread_mutex_unlock(&p->m->mt.waiter[p->l_fork]);
-		return (-1);
+		if (!service(p, f, str, p->l_fork))
+		{
+			pthread_mutex_unlock(&p->m->mt.waiter[p->l_fork]);
+			return (-1);
+		}
+		if (!service(p, f, str, p->r_fork))
+			return (0);
 	}
-	if (!service(p, f, str, p->r_fork))
-		return (0);
+	else
+	{
+		if (!service(p, f, str, p->r_fork))
+		{
+			pthread_mutex_unlock(&p->m->mt.waiter[p->r_fork]);
+			return (-1);
+		}
+		if (!service(p, f, str, p->l_fork))
+			return (0);
+	}
 	return (1);
 }

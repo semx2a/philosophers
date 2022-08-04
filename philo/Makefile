@@ -6,25 +6,17 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/08/04 19:39:13 by seozcan          ###   ########.fr        #
+#    Updated: 2022/08/04 18:22:46 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::PATHS::
 
-APATH		 	:= philo
+ODIR			:= objs
 
-BPATH			:= philo_bonus
+SDIR			:= srcs
 
-ODIR			:= $(addprefix $(APATH)/, objs)
-
-BODIR			:= $(addprefix $(BPATH)/, objs)
-
-SDIR			:= $(addprefix $(APATH)/, srcs)
-
-BDIR			:= $(addprefix $(BPATH)/, srcs)
-
-IDIR			:= $(addprefix $(APATH)/, inc)
+IDIR			:= inc
 
 LDIR 			:= libft
 
@@ -34,9 +26,7 @@ MDIR			:= minilibx-linux
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::TARGET::
 
-NAME			:= $(addprefix $(APATH)/, philo)
-
-BNAME			:= $(addprefix $(BPATH)/, philo_bonus)
+NAME			:= philo
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCES::
 
@@ -152,12 +142,9 @@ ifeq ($(IS_MINILIBX), true)
 endif
 
 DEPS				= $(OBJS:.o=.d)
-BDEPS				= $(BOBJS:.o=.d)
 
 vpath %.c $(SDIR)\
-		$(BDIR)
 vpath %.o $(ODIR)\
-		$(BODIR)
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::MANDATORY::
 
@@ -176,24 +163,6 @@ $(OBJS):		| $(ODIR)
 $(ODIR):
 	@mkdir -p $(ODIR)
 	@echo "$(HIGREEN)objs folder:\t\t\t\t\t\t[OK]$(NO_COLOR)"
-
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::
-
-bonus:			header lib h3 message_b $(BNAME)
-
-$(BODIR)/%.o:	%.c 
-	@$(CC) $(WFLAGS) $(GFLAG) $(INCLUDE_FLAGS) -c $< -o $@ 
-	@echo "$(HIGREEN)bonus compilation:\t\t\t\t\t[OK]$(NO_COLOR)"
-
-$(BNAME):		$(BOBJS)
-	@$(CC) $(WFLAGS) $(GFLAGS) $(SANFLAG) $(BOBJS) -o $(BNAME)
-	@echo "$(HIGREEN)bonus exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
-
-$(BOBJS):		| $(BODIR)
-
-$(BODIR):
-	@mkdir -p $(BODIR)
-	@echo "$(HIGREEN)objs_bonus folder:\t\t\t\t\t[OK]$(NO_COLOR)"
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::RULES::
 
@@ -220,12 +189,10 @@ push:		header fclean
 
 clean:		header
 	@rm -rf $(ODIR)
-	@rm -rf $(BODIR)
 	@echo "$(HIORANGE)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
 
 fclean:		header clean
 	@rm -f $(NAME)
-	@rm -f $(BNAME)
 	@echo "$(HIORANGE)$(NAME) executable:\t\t\t\t\t[RM]$(NO_COLOR)"
 
 fcleanlib:	header fclean
@@ -258,9 +225,6 @@ header:
 h2:
 	@echo "\n$(BHIPURPLE):::::::::::::::::::::::::::::::::::::::::::::::::::::PHILO::\n$(NO_COLOR)"
 
-h3:
-	@echo "\n$(BHIPURPLE):::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::\n$(NO_COLOR)"
-
 message:
 	@make -q $(NAME) && echo "$(BHIGREEN)All files are already up to date$(NO_COLOR)" || true
 
@@ -270,6 +234,5 @@ message_b:
 re:		header fclean all 
 
 -include $(DEPS)
--include $(BDEPS)
 
 .PHONY:	all bonus clean fclean re push update o_dir h1 h2 header 

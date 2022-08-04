@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 19:01:58 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/04 18:47:09 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,6 @@ int	main_alloc(t_main *m, char **av)
 	m->p = (t_philos *)malloc(sizeof(t_philos) * (long unsigned)m->philo_nb);
 	if (!m->p)
 		return (0);
-	m->platter = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
-	if (!m->platter)
-		return (0);
-	memset(m->platter, 0, (long unsigned)m->philo_nb);
 	return (1);
 }
 
@@ -99,8 +95,6 @@ int	mutex_init(t_main *m)
 	if (pthread_mutex_init(&m->mt.satiated, NULL) != 0)
 		return (0);
 	if (pthread_mutex_init(&m->mt.reaper, NULL) != 0)
-		return (0);
-	if (pthread_mutex_init(&m->mt.hand, NULL) != 0)
 		return (0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 18:33:08 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/04 19:53:23 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,8 @@ int	service(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int fork)
 {
 	f(&p->m->mt.waiter[fork]);
 	if (str != NULL)
-	{
-		write_data(&p->m->mt.hand, &p->m->platter[fork], 1, 0);
 		if (!print_action(p, str))
 			return (0);
-	}
-	else
-		write_data(&p->m->mt.hand, &p->m->platter[fork], 0, 0);
 	return (1);
 }
 
@@ -58,7 +53,7 @@ int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
 		if (!service(p, f, str, p->r_fork))
 			return (0);
 	}
-	else
+	else if (p->l_fork > p->r_fork)
 	{
 		if (!service(p, f, str, p->r_fork))
 		{
@@ -67,6 +62,11 @@ int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
 		}
 		if (!service(p, f, str, p->l_fork))
 			return (0);
+	}
+	else
+	{
+		service(p, f, str, p->l_fork);
+		return (0);
 	}
 	return (1);
 }

@@ -1,13 +1,8 @@
-5 800 200 200		no death OK
-5 800 200 200 7		no death OK
-4 410 200 200		no death OK
-3 610 200 100		no death OK
-7 610 200 100		no death OK
-200 2200 200 200	no death OK
-200 410 200 200		no death OK
-4 400 200 200		no death NOK
-
-1 800 200 200		should die NOK
-4 310 200 200		should die OK
-2 310 200 200		should die OK
-200 310 200 100		should die OK
+!!![philo-Test #1]: Given 4 310 200 100 arguments to philo, a philosopher should die !
+[philo-Test #2]: Given 4 410 200 200 arguments to philo, no philosopher should die !
+[philo-Test #3]: Given 4 800 200 200 arguments to philo, no philosopher should die !
+[philo-Test #4]: Given 4 410 200 200 7 arguments to philo, philo should only be stopped if each philosopher ate at least 7 times !
+[philo-Test #4]: Given 4 410 200 200 10 arguments to philo, philo should only be stopped if each philosopher ate at least 10 times !
+[philo-Test #4]: Given 4 410 200 200 12 arguments to philo, philo should only be stopped if each philosopher ate at least 12 times !
+[philo-Test #4]: Given 4 410 200 200 15 arguments to philo, philo should only be stopped if each philosopher ate at least 15 times !
+[philo-Test #5]: Given 2 60 60 60 arguments to philo, the time difference of each death shouldn't be bigger than 10ms !

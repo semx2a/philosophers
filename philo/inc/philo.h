@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 19:00:19 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/04 19:42:59 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@
 typedef struct s_mutex
 {
 	pthread_mutex_t	*waiter;
-	pthread_mutex_t	hand;
 	pthread_mutex_t	display;
 	pthread_mutex_t	satiated;
 	pthread_mutex_t	reaper;
@@ -95,10 +94,8 @@ typedef struct s_main
 	int				j;
 	int				philo_nb;
 	int				*err;
-	int				start;
 	int				ghost;
 	int				done_eating;
-	int				*platter;
 	pthread_t		*philosophers;
 	struct timeval	bigbang;
 	t_philos		*p;
@@ -131,7 +128,8 @@ int				init_params(t_main *m, int ac, char **av);
 //		philo_utils.c
 int				ft_isdigit(int c);
 int				ft_atoi(const char *str);
-size_t			ft_strlen(const char *str);
 void			ft_error(char *str);
+void			mr_sandman(t_philos *p, unsigned int time);
+size_t			ft_strlen(const char *str);
 
 #endif

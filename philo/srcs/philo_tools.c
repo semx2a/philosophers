@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 18:55:42 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/04 19:36:16 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ unsigned int	chrono(struct timeval bigbang)
 
 int	ghost_buster(t_philos *p)
 {	
+	p->timestamp = chrono(p->m->bigbang);
 	if (read_data(&p->m->mt.reaper, &p->m->ghost) != 0)
 		return (1);
 	else if (!read_data(&p->m->mt.reaper, &p->m->ghost)
@@ -39,7 +40,6 @@ int	ghost_buster(t_philos *p)
 
 int	print_action(t_philos *p, char *str)
 {	
-	p->timestamp = chrono(p->m->bigbang);
 	if (ghost_buster(p))
 		return (0);
 	pthread_mutex_lock(&p->m->mt.display);
@@ -63,4 +63,13 @@ void	ft_flush(t_main *m)
 	free(m->p);
 	free(m->philosophers);
 	free(m->err);
+}
+
+void	mr_sandman(t_philos *p, unsigned int time)
+{
+	unsigned int	countdown;
+
+	countdown = chrono(p->m->bigbang) + (time / 1000);
+	while (chrono(p->m->bigbang) < countdown && !ghost_buster(p))
+		usleep(1);
 }

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/04 19:33:09 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/05 17:09:59 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ int	think(t_philos *p)
 int	eat(t_philos *p)
 {
 	p->err = waiter(p, &pthread_mutex_lock, FORK);
-	if (p->err == -1 || p->err == 0)
+	if (p->err == -2 || p->err == -1 || p->err == 0)
 	{
-		if (p->err == 0)
+		if (p->err == 0 || p->err == -2)
 			waiter(p, &pthread_mutex_unlock, NULL);
 		return (0);
 	}
@@ -54,14 +54,12 @@ int	eat(t_philos *p)
 		waiter(p, &pthread_mutex_unlock, NULL);
 		return (0);
 	}
+	p->expected_death = p->timestamp + p->time2_die;
 	mr_sandman(p, p->time2_eat);
 	waiter(p, &pthread_mutex_unlock, NULL);
-	p->expected_death = p->timestamp + p->time2_die;
 	if (p->food_limit == 1 && !is_full(p))
 		return (0);
 	if (!p_sleep(p))
-		return (0);
-	if (!think(p))
 		return (0);
 	return (1);
 }
@@ -75,7 +73,11 @@ void	*routine(void *p_data)
 	if (p->philo_id % 2 == 0)
 		mr_sandman(p, p->offset);
 	while (!ghost_buster(p))
+	{
 		if (!eat(p))
 			break ;
+		if (!think(p))
+			break ;
+	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/04 19:53:23 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/05 16:50:50 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,35 +38,38 @@ int	service(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int fork)
 	if (str != NULL)
 		if (!print_action(p, str))
 			return (0);
+	if (p->l_fork == p->r_fork)
+		return (-2);
+	return (1);
+}
+
+int	inspect_platter(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int f1,
+			int f2)
+{
+	if (!service(p, f, str, f1))
+	{
+		pthread_mutex_unlock(&p->m->mt.waiter[f1]);
+		return (-1);
+	}
+	if (!service(p, f, str, f2))
+		return (0);
 	return (1);
 }
 
 int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
 {
+	int	ret;
+
+	ret = 0;
 	if (p->l_fork < p->r_fork)
-	{
-		if (!service(p, f, str, p->l_fork))
-		{
-			pthread_mutex_unlock(&p->m->mt.waiter[p->l_fork]);
-			return (-1);
-		}
-		if (!service(p, f, str, p->r_fork))
-			return (0);
-	}
+		ret = inspect_platter(p, f, str, p->l_fork, p->r_fork);
 	else if (p->l_fork > p->r_fork)
-	{
-		if (!service(p, f, str, p->r_fork))
-		{
-			pthread_mutex_unlock(&p->m->mt.waiter[p->r_fork]);
-			return (-1);
-		}
-		if (!service(p, f, str, p->l_fork))
-			return (0);
-	}
+		ret = inspect_platter(p, f, str, p->r_fork, p->l_fork);
 	else
 	{
-		service(p, f, str, p->l_fork);
-		return (0);
+		ret = service(p, f, str, p->l_fork);
+		while (!ghost_buster(p))
+			usleep(1);
 	}
-	return (1);
+	return (ret);
 }

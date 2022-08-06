@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/04 19:42:59 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/06 23:37:54 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@
 //		error numbers
 # include <errno.h>
 
+// 		type limits
+# include <limits.h>
+
 //		ERRORS
 # define ERR			"Error\n"
 # define ERR_DIGITS		"Error: only digits allowed.\n"
@@ -49,7 +52,6 @@
 # define ERR_THREAD		"Error: thread creation failed\n"
 
 //		PARAMETERS
-# define INT_MAX		2147483647
 # define MAX_THREADS	1024
 
 //		MESSAGES
@@ -127,7 +129,7 @@ int				init_params(t_main *m, int ac, char **av);
 
 //		philo_utils.c
 int				ft_isdigit(int c);
-int				ft_atoi(const char *str);
+long			ft_atoli(const char *str);
 void			ft_error(char *str);
 void			mr_sandman(t_philos *p, unsigned int time);
 size_t			ft_strlen(const char *str);

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:34 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/03 18:14:31 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/06 23:39:33 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int	ft_isdigit(int c)
 	return (0);
 }
 
-int	ft_atoi(const char *str)
+long	ft_atoli(const char *str)
 {
-	int	i;
-	int	n;
-	int	r;
+	int		i;
+	int		n;
+	long	r;
 
 	i = 0;
 	n = 1;
@@ -38,7 +38,7 @@ int	ft_atoi(const char *str)
 	}
 	while (ft_isdigit(str[i]))
 	{
-		r = r * 10 + (int)str[i] - 48;
+		r = r * 10 + (long)str[i] - 48;
 		i++;
 	}
 	return (n * r);

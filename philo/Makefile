@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/08/04 18:22:46 by seozcan          ###   ########.fr        #
+#    Updated: 2022/08/08 18:00:29 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,15 +31,9 @@ NAME			:= philo
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCES::
 
 SRCS			:= philo_main.c philo_init.c philo_utils.c philo_tools.c\
-philo_routine.c philo_threads.c philo_mutexes.c
+philo_routine.c philo_threads.c philo_protagonists.c
 
 OBJS			= $(addprefix $(ODIR)/, $(SRCS:.c=.o))
-
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::
-
-BSRCS			:= 
-
-BOBJS			= $(addprefix $(BODIR)/,$(BSRCS:.c=.o))
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COMPILERS::
 

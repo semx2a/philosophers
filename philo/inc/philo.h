@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/06 23:37:54 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/08 18:01:45 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,31 +107,29 @@ typedef struct s_main
 //		philo_routine.c
 void			*routine(void *p_data);
 
+//		philo_init.c
+int				init_params(t_main *m, int ac, char **av);
+
 //		philo_threads.c
 int				philosophers_init(t_main *m);
-int				philosophers_detach(t_main *m);
 int				philosophers_join(t_main *m);
 
-//		philo_tools.c
-unsigned int	chrono(struct timeval bigbang);
-int				print_action(t_philos *p, char *str);
+//		philo_protagonists.c
 int				ghost_buster(t_philos *p);
-void			ft_flush(t_main *m);
+int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
+void			mr_sandman(t_philos *p, unsigned int time);
 
-//		philo_mutexes.c
+//		philo_tools.c
 int				read_data(pthread_mutex_t *mu, int *data);
 void			write_data(pthread_mutex_t *mu, int *data, int value,
 					char instruction);
-int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
-
-//		philo_init.c
-int				init_params(t_main *m, int ac, char **av);
+unsigned int	chrono(struct timeval bigbang);
+int				print_action(t_philos *p, char *str);
 
 //		philo_utils.c
 int				ft_isdigit(int c);
 long			ft_atoli(const char *str);
 void			ft_error(char *str);
-void			mr_sandman(t_philos *p, unsigned int time);
 size_t			ft_strlen(const char *str);
 
 #endif

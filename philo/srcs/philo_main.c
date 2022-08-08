@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/02 19:46:17 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/08 17:51:17 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,23 @@
 */
 
 #include "../inc/philo.h"
+
+void	ft_flush(t_main *m)
+{
+	m->i = 0;
+	while (m->i < m->philo_nb)
+	{
+		pthread_mutex_destroy(&m->mt.waiter[m->i]);
+		m->i++;
+	}
+	pthread_mutex_destroy(&m->mt.satiated);
+	pthread_mutex_destroy(&m->mt.display);
+	pthread_mutex_destroy(&m->mt.reaper);
+	free(m->mt.waiter);
+	free(m->p);
+	free(m->philosophers);
+	free(m->err);
+}
 
 int	main(int ac, char **av)
 {

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/05 17:09:59 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/08 17:48:27 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ int	is_full(t_philos *p)
 {	
 	p->eat_counter++;
 	if (p->eat_counter == p->n_eats)
-	{
 		write_data(&p->m->mt.satiated, &p->m->done_eating, 1, '+');
-	}
 	if (read_data(&p->m->mt.satiated, &p->m->done_eating)
 		== read_data(&p->m->mt.satiated, &p->m->philo_nb))
 		return (0);
@@ -45,7 +43,7 @@ int	eat(t_philos *p)
 	p->err = waiter(p, &pthread_mutex_lock, FORK);
 	if (p->err == -2 || p->err == -1 || p->err == 0)
 	{
-		if (p->err == 0 || p->err == -2)
+		if (p->err == -1 || p->err == -2)
 			waiter(p, &pthread_mutex_unlock, NULL);
 		return (0);
 	}

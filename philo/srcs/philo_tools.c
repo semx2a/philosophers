@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/08 17:58:37 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 18:31:51 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,25 @@ void	write_data(pthread_mutex_t *mu, int *data, int value, char instruction)
 	else
 		*(data) = value;
 	pthread_mutex_unlock(mu);
+}
+
+int	platter(t_philos *p, int val)
+{
+	write_data(&p->m->mt.platter, &p->m->platter[p->l_fork], val, 0);
+	write_data(&p->m->mt.platter, &p->m->platter[p->r_fork], val, 0);
+	if (val == 1)
+	{
+		p->err = waiter(p, &pthread_mutex_lock, FORK);
+		if (p->err == -2 || p->err == -1 || p->err == 0)
+		{
+			if (p->err == -1 || p->err == -2)
+				waiter(p, &pthread_mutex_unlock, NULL);
+			return (0);
+		}
+	}
+	else if (!val)
+		waiter(p, &pthread_mutex_unlock, NULL);
+	return (1);
 }
 
 unsigned int	chrono(struct timeval bigbang)

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/08 17:48:27 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 18:32:20 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	p_sleep(t_philos *p)
 {	
 	if (!print_action(p, SLEEPING))
 		return (0);
-	mr_sandman(p, p->time2_sleep);
+	if (!mr_sandman(p, p->time2_sleep))
+		return (0);
 	return (1);
 }
 
@@ -40,25 +41,23 @@ int	think(t_philos *p)
 
 int	eat(t_philos *p)
 {
-	p->err = waiter(p, &pthread_mutex_lock, FORK);
-	if (p->err == -2 || p->err == -1 || p->err == 0)
-	{
-		if (p->err == -1 || p->err == -2)
-			waiter(p, &pthread_mutex_unlock, NULL);
+	while (read_data(&p->m->mt.platter, &p->m->platter[p->l_fork])
+		&& read_data(&p->m->mt.platter, &p->m->platter[p->r_fork]))
+		usleep(10);
+	if (!platter(p, 1))
+		return (0);
+	if (!print_action(p, EATING))
+	{	
+		platter(p, 0);
 		return (0);
 	}
-	if (!print_action(p, EATING))
-	{
-		waiter(p, &pthread_mutex_unlock, NULL);
+	if (!mr_sandman(p, p->time2_eat))
+	{	
+		platter(p, 0);
 		return (0);
 	}
 	p->expected_death = p->timestamp + p->time2_die;
-	mr_sandman(p, p->time2_eat);
-	waiter(p, &pthread_mutex_unlock, NULL);
-	if (p->food_limit == 1 && !is_full(p))
-		return (0);
-	if (!p_sleep(p))
-		return (0);
+	platter(p, 0);
 	return (1);
 }
 
@@ -69,11 +68,20 @@ void	*routine(void *p_data)
 	p = (t_philos *)p_data;
 	p->expected_death = chrono(p->m->bigbang) + p->time2_die;
 	if (p->philo_id % 2 == 0)
-		mr_sandman(p, p->offset);
-	while (!ghost_buster(p))
+		if (!mr_sandman(p, p->offset))
+			return (NULL);
+	while (1)
 	{
-		if (!eat(p))
+		p->err = eat(p);
+		if (p->err == 0)
 			break ;
+		else
+		{
+			if (p->food_limit == 1 && !is_full(p))
+				return (0);
+			if (!p_sleep(p))
+				return (0);
+		}
 		if (!think(p))
 			break ;
 	}

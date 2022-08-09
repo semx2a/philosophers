@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/08 17:57:42 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 16:53:35 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ int	main_alloc(t_main *m, char **av)
 {	
 	m->philo_nb = (int)ft_atoli(av[1]);
 	if (m->philo_nb > MAX_THREADS)
+		return (0);
+	m->platter = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
+	if (!m->platter)
 		return (0);
 	m->philosophers = (pthread_t *)malloc(sizeof(pthread_t)
 			* (long unsigned)m->philo_nb);
@@ -104,6 +107,8 @@ int	mutex_init(t_main *m)
 	if (pthread_mutex_init(&m->mt.satiated, NULL) != 0)
 		return (0);
 	if (pthread_mutex_init(&m->mt.reaper, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.platter, NULL) != 0)
 		return (0);
 	return (1);
 }

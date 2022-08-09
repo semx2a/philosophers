@@ -6,19 +6,24 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/08 17:59:42 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 16:50:13 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	mr_sandman(t_philos *p, unsigned int time)
+int	mr_sandman(t_philos *p, unsigned int time)
 {
 	unsigned int	countdown;
 
 	countdown = chrono(p->m->bigbang) + time;
-	while (chrono(p->m->bigbang) < countdown && !ghost_buster(p))
+	while (chrono(p->m->bigbang) < countdown)
+	{
+		if (ghost_buster(p))
+			return (0);
 		usleep(1);
+	}
+	return (1);
 }
 
 int	ghost_buster(t_philos *p)
@@ -74,8 +79,7 @@ int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
 	else
 	{
 		ret = service(p, f, str, p->l_fork);
-		while (!ghost_buster(p))
-			usleep(1);
+		mr_sandman(p, p->time2_die);
 	}
 	return (ret);
 }

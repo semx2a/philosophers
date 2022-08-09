@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/08 18:01:45 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 18:31:49 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 # define FORK			"%u %i has taken a \033[0;34mfork\033[0m\n"
 # define THINKING		"%u %i is \033[0;36mthinking\033[0m\n"
 # define SLEEPING		"%u %i is \033[0;35msleeping\033[0m\n"
+# define XPD_DEATH		"%u %i is \033[0;37mexpected to die\033[0m\n"
 
 //		STRUCTURES
 //		unsigned long == time in usec
@@ -70,6 +71,7 @@ typedef struct s_mutex
 	pthread_mutex_t	display;
 	pthread_mutex_t	satiated;
 	pthread_mutex_t	reaper;
+	pthread_mutex_t	platter;
 }	t_mutex;
 
 typedef struct s_philos
@@ -98,6 +100,7 @@ typedef struct s_main
 	int				*err;
 	int				ghost;
 	int				done_eating;
+	int				*platter;
 	pthread_t		*philosophers;
 	struct timeval	bigbang;
 	t_philos		*p;
@@ -117,7 +120,7 @@ int				philosophers_join(t_main *m);
 //		philo_protagonists.c
 int				ghost_buster(t_philos *p);
 int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
-void			mr_sandman(t_philos *p, unsigned int time);
+int				mr_sandman(t_philos *p, unsigned int time);
 
 //		philo_tools.c
 int				read_data(pthread_mutex_t *mu, int *data);
@@ -125,6 +128,7 @@ void			write_data(pthread_mutex_t *mu, int *data, int value,
 					char instruction);
 unsigned int	chrono(struct timeval bigbang);
 int				print_action(t_philos *p, char *str);
+int				platter(t_philos *p, int val);
 
 //		philo_utils.c
 int				ft_isdigit(int c);

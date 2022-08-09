@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 18:32:48 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 23:05:18 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,39 @@ int	philosophers_init(t_main *m)
 	return (1);
 }
 
+int	ecg(t_main *m)
+{
+	while (1)
+	{
+		m->i = 0;
+		while (m->ghost == 0 && m->i < m->philo_nb)
+		{
+			m->death_sentence = chrono(m->bigbang);
+			if (m->death_sentence
+				> read_udata(&m->mt.time[m->i], &m->p[m->i].expected_death))
+			{
+				write_data(&m->mt.reaper, &m->ghost, 1, 0);
+				pthread_mutex_lock(&m->mt.display);
+				printf(DEAD, m->death_sentence, m->p[m->i].philo_id);
+				pthread_mutex_unlock(&m->mt.display);
+				return (1);
+			}
+			m->i++;
+			usleep(200);
+		}
+	}
+	return (1);
+}
+
 int	philosophers_join(t_main *m)
 {
-	int	i;
-
-	i = 0;
-	while (i < m->philo_nb)
+	m->i = 0;
+	while (m->i < m->philo_nb)
 	{
-		if (pthread_join(m->philosophers[i],
-				(void *)(intptr_t)m->err[i]) != 0)
+		if (pthread_join(m->philosophers[m->i],
+				(void *)(intptr_t)m->err[m->i]) != 0)
 			return (0);
-		i++;
+		m->i++;
 	}
 	return (1);
 }

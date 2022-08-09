@@ -6,37 +6,33 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 16:53:35 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 23:27:09 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	check_params(int ac, char **av)
+int	check_params(t_main *m, int ac, char **av)
 {
-	int		i;
-	int		j;
-	long	value;
-
-	i = 1;
-	while (i < ac)
+	m->i = 1;
+	while (m->i < ac)
 	{
-		j = 0;
-		while (av[i][j])
+		m->j = 0;
+		while (av[m->i][m->j])
 		{
-			if (!ft_isdigit(av[i][j]))
+			if (!ft_isdigit(av[m->i][m->j]))
 				return (0);
-			j++;
+			m->j++;
 		}
-		i++;
+		m->i++;
 	}
-	i = 1;
-	while (i < ac)
+	m->i = 1;
+	while (m->i < ac)
 	{
-		value = ft_atoli(av[i]);
-		if (value < INT_MIN || value > INT_MAX)
+		m->data = ft_atoli(av[m->i]);
+		if (m->data < INT_MIN || m->data > INT_MAX)
 			return (0);
-		i++;
+		m->i++;
 	}
 	return (1);
 }
@@ -45,9 +41,6 @@ int	main_alloc(t_main *m, char **av)
 {	
 	m->philo_nb = (int)ft_atoli(av[1]);
 	if (m->philo_nb > MAX_THREADS)
-		return (0);
-	m->platter = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
-	if (!m->platter)
 		return (0);
 	m->philosophers = (pthread_t *)malloc(sizeof(pthread_t)
 			* (long unsigned)m->philo_nb);
@@ -64,6 +57,7 @@ int	main_alloc(t_main *m, char **av)
 
 int	philos_alloc(t_main *m, int ac, char **av)
 {	
+	m->i = 0;
 	while (m->i < m->philo_nb)
 	{
 		m->p[m->i] = (t_philos){0};
@@ -95,10 +89,15 @@ int	mutex_init(t_main *m)
 	m->mt.waiter = malloc(sizeof(pthread_mutex_t) * (long unsigned)m->philo_nb);
 	if (!m->mt.waiter)
 		return (0);
+	m->mt.time = malloc(sizeof(pthread_mutex_t) * (long unsigned)m->philo_nb);
+	if (!m->mt.time)
+		return (0);
 	m->i = 0;
 	while (m->i < m->philo_nb)
 	{
 		if (pthread_mutex_init(&m->mt.waiter[m->i], NULL) != 0)
+			return (0);
+		if (pthread_mutex_init(&m->mt.time[m->i], NULL) != 0)
 			return (0);
 		m->i++;
 	}
@@ -108,14 +107,12 @@ int	mutex_init(t_main *m)
 		return (0);
 	if (pthread_mutex_init(&m->mt.reaper, NULL) != 0)
 		return (0);
-	if (pthread_mutex_init(&m->mt.platter, NULL) != 0)
-		return (0);
 	return (1);
 }
 
 int	init_params(t_main *m, int ac, char **av)
 {	
-	if (!check_params(ac, av))
+	if (!check_params(m, ac, av))
 	{
 		ft_error(ERR_DIGITS);
 		return (0);

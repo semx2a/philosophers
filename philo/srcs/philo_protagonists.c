@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 16:50:13 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 23:27:23 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,20 @@ int	mr_sandman(t_philos *p, unsigned int time)
 {
 	unsigned int	countdown;
 
-	countdown = chrono(p->m->bigbang) + time;
-	while (chrono(p->m->bigbang) < countdown)
+	countdown = time * 1000;
+	while (countdown)
 	{
-		if (ghost_buster(p))
+		if (read_data(&p->m->mt.reaper, &p->m->ghost))
 			return (0);
-		usleep(1);
+		usleep(50000);
+		countdown -= 50000;
+		if (countdown < 50000)
+		{
+			usleep(countdown);
+			break ;
+		}
 	}
 	return (1);
-}
-
-int	ghost_buster(t_philos *p)
-{	
-	p->timestamp = chrono(p->m->bigbang);
-	if (read_data(&p->m->mt.reaper, &p->m->ghost) != 0)
-		return (1);
-	else if (!read_data(&p->m->mt.reaper, &p->m->ghost)
-		&& p->timestamp > p->expected_death)
-	{
-		write_data(&p->m->mt.reaper, &p->m->ghost, (int)p->philo_id, 0);
-		pthread_mutex_lock(&p->m->mt.display);
-		printf(DEAD, p->timestamp, p->philo_id);
-		pthread_mutex_unlock(&p->m->mt.display);
-		return (1);
-	}
-	return (0);
 }
 
 int	service(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int fork)
@@ -67,7 +56,7 @@ int	inspect_platter(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int f1,
 	return (1);
 }
 
-int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
+int	platter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
 {
 	int	ret;
 
@@ -82,4 +71,21 @@ int	waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
 		mr_sandman(p, p->time2_die);
 	}
 	return (ret);
+}
+
+int	waiter(t_philos *p, int val)
+{
+	if (val == 1)
+	{
+		p->err = platter(p, &pthread_mutex_lock, FORK);
+		if (p->err == -2 || p->err == -1 || p->err == 0)
+		{
+			if (p->err == -1 || p->err == -2)
+				platter(p, &pthread_mutex_unlock, NULL);
+			return (0);
+		}
+	}
+	else if (!val)
+		platter(p, &pthread_mutex_unlock, NULL);
+	return (1);
 }

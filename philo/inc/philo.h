@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 18:31:49 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/09 23:03:07 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_mutex
 	pthread_mutex_t	display;
 	pthread_mutex_t	satiated;
 	pthread_mutex_t	reaper;
-	pthread_mutex_t	platter;
+	pthread_mutex_t	*time;
 }	t_mutex;
 
 typedef struct s_philos
@@ -84,9 +84,9 @@ typedef struct s_philos
 	int				food_limit;
 	int				err;
 	unsigned int	time2_die;
-	unsigned int	expected_death;
 	unsigned int	time2_eat;
 	unsigned int	time2_sleep;
+	unsigned int	expected_death;
 	unsigned int	offset;
 	unsigned int	timestamp;
 	struct s_main	*m;
@@ -97,10 +97,12 @@ typedef struct s_main
 	int				i;
 	int				j;
 	int				philo_nb;
-	int				*err;
 	int				ghost;
 	int				done_eating;
 	int				*platter;
+	int				*err;
+	long			data;
+	unsigned int	death_sentence;
 	pthread_t		*philosophers;
 	struct timeval	bigbang;
 	t_philos		*p;
@@ -116,19 +118,24 @@ int				init_params(t_main *m, int ac, char **av);
 //		philo_threads.c
 int				philosophers_init(t_main *m);
 int				philosophers_join(t_main *m);
+int				ecg(t_main *m);
 
 //		philo_protagonists.c
-int				ghost_buster(t_philos *p);
-int				waiter(t_philos *p, int (*f)(pthread_mutex_t *), char *str);
+//int				ghost_buster(t_philos *p);
 int				mr_sandman(t_philos *p, unsigned int time);
+int				waiter(t_philos *p, int val);
 
-//		philo_tools.c
+//		philo_rw.c
 int				read_data(pthread_mutex_t *mu, int *data);
 void			write_data(pthread_mutex_t *mu, int *data, int value,
 					char instruction);
+unsigned int	read_udata(pthread_mutex_t *mu, unsigned int *data);
+void			write_udata(pthread_mutex_t *mu, unsigned int *data,
+					unsigned int value,	char instruction);
+
+//		philo_tools.c
 unsigned int	chrono(struct timeval bigbang);
 int				print_action(t_philos *p, char *str);
-int				platter(t_philos *p, int val);
 
 //		philo_utils.c
 int				ft_isdigit(int c);

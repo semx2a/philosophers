@@ -16,18 +16,20 @@ int	mr_sandman(t_philos *p, unsigned int time)
 {
 	unsigned int	countdown;
 
-	countdown = time;
-	while (countdown)
+	countdown = chrono(&p->m->mt.chrono, p->m->bigbang);
+	while (1)
 	{
 		if (read_data(&p->m->mt.reaper, &p->m->ghost))
 			return (0);
-		usleep(50000);
-		countdown -= 50000;
-		if (countdown < 50000)
+		if (chrono(&p->m->mt.chrono, p->m->bigbang) - countdown >= time)
+			break;
+		usleep(50);
+		/*countdown -= 500;
+		if (countdown < 500)
 		{
 			usleep(countdown);
 			break ;
-		}
+		}*/
 	}
 	return (1);
 }

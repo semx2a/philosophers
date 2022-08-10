@@ -49,8 +49,9 @@ void	*routine(void *p_data)
 	p = (t_philos *)p_data;
 //	printf("%d :: l_fork #%d	r_fork #%d\n", p->philo_id, p->l_fork, p->r_fork);
 	if (p->philo_id % 2 == 0)
-		if (!mr_sandman(p, p->offset))
-			return (0);
+		/* if (!mr_sandman(p, p->offset))
+			return (0); */
+		usleep(10000);
 	p->timestamp = chrono(&p->m->mt.chrono, p->m->bigbang);
 	write_udata(&p->m->mt.time[p->philo_id - 1], &p->expected_death,
 		p->timestamp + p->time2_die, 0);

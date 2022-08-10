@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 18:54:57 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 19:51:16 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	check_params(t_main *m, int ac, char **av)
 	while (m->i < ac)
 	{
 		m->data = ft_atoli(av[m->i]);
-		if (m->data < INT_MIN || m->data > INT_MAX)
+		if (m->data < INT_MIN || m->data > INT_MAX || m->data == 0)
 			return (0);
 		m->i++;
 	}

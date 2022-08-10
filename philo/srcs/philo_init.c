@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 19:51:16 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 21:50:13 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		m->p[m->i].expected_death = m->p[m->i].time2_die;
 		m->p[m->i].time2_eat = (unsigned)ft_atoli(av[3]);
 		m->p[m->i].time2_sleep = (unsigned)ft_atoli(av[4]);
-		m->p[m->i].offset = m->p[m->i].time2_sleep / (unsigned int)m->philo_nb;
 		m->p[m->i].m = m;
 		if (ac == 6)
 			m->p[m->i].eat_counter = (int)ft_atoli(av[5]);

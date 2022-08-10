@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 19:00:29 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 21:49:41 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,9 @@
 # define FORK			"%u %i has taken a \033[0;34mfork\033[0m\n"
 # define THINKING		"%u %i is \033[0;36mthinking\033[0m\n"
 # define SLEEPING		"%u %i is \033[0;35msleeping\033[0m\n"
-# define XPD_DEATH		"%u %i is \033[0;37mexpected to die\033[0m\n"
 
 //		STRUCTURES
-//		unsigned long == time in usec
+//		unsigned long == time in ms
 
 typedef struct s_mutex
 {
@@ -86,7 +85,6 @@ typedef struct s_philos
 	unsigned int	time2_eat;
 	unsigned int	time2_sleep;
 	unsigned int	expected_death;
-	unsigned int	offset;
 	unsigned int	timestamp;
 	struct s_main	*m;
 }	t_philos;

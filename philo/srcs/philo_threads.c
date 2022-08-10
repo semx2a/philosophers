@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 15:12:51 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 17:06:30 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,34 @@ int	philosophers_init(t_main *m)
 	return (1);
 }
 
+int	food_stock(t_main *m)
+{
+	if (read_data(&m->mt.satiated, &m->p[m->i].eat_counter) == m->n_eats)
+		m->done_eating += 1;
+	if (m->done_eating != m->philo_nb)
+		return (1);
+	return (0);
+}
+
 int	ecg(t_main *m)
 {
-	while (1)
+	m->i = 0;
+	while (m->i < m->philo_nb)
 	{
-		m->i = 0;
-		while (m->ghost == 0 && m->i < m->philo_nb)
+		if (m->n_eats && !food_stock(m))
+			break ;
+		m->death_sentence = chrono(&m->mt.chrono, m->bigbang);
+		if (m->death_sentence
+			> read_udata(&m->mt.time[m->i], &m->p[m->i].expected_death))
 		{
-			m->death_sentence = chrono(&m->mt.chrono, m->bigbang);
-			if (m->death_sentence
-				> read_udata(&m->mt.time[m->i], &m->p[m->i].expected_death))
-			{
-				write_data(&m->mt.reaper, &m->ghost, 1, 0);
-				pthread_mutex_lock(&m->mt.display);
-				printf(DEAD, m->death_sentence, m->p[m->i].philo_id);
-				pthread_mutex_unlock(&m->mt.display);
-				return (1);
-			}
-			m->i++;
-			usleep(200);
+			write_data(&m->mt.reaper, &m->ghost, m->i + 1, 0);
+			print_action(&m->p[m->i], DEAD);
+			break ;
 		}
+		m->i++;
+		if (m->i == m->philo_nb)
+			m->i = 0;
+		usleep(200);
 	}
 	return (1);
 }

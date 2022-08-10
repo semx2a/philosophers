@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 15:12:11 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 16:55:23 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	check_params(t_main *m, int ac, char **av)
 	return (1);
 }
 
-int	main_alloc(t_main *m, char **av)
+int	main_alloc(t_main *m, int ac, char **av)
 {	
 	m->philo_nb = (int)ft_atoli(av[1]);
 	if (m->philo_nb > MAX_THREADS)
@@ -52,10 +52,12 @@ int	main_alloc(t_main *m, char **av)
 	m->p = (t_philos *)malloc(sizeof(t_philos) * (long unsigned)m->philo_nb);
 	if (!m->p)
 		return (0);
+	if (ac == 6)
+		m->n_eats = (int)ft_atoli(av[5]);
 	return (1);
 }
 
-int	philos_alloc(t_main *m, int ac, char **av)
+int	philos_alloc(t_main *m, char **av)
 {	
 	m->i = 0;
 	while (m->i < m->philo_nb)
@@ -70,13 +72,6 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		m->p[m->i].time2_sleep = (unsigned)ft_atoli(av[4]);
 		m->p[m->i].offset = m->p[m->i].time2_sleep / (unsigned int)m->philo_nb;
 		m->p[m->i].m = m;
-		if (ac == 6)
-		{
-			m->p[m->i].n_eats = (int)ft_atoli(av[5]);
-			if (m->p[m->i].n_eats >= INT_MAX)
-				return (0);
-			m->p[m->i].food_limit = 1;
-		}
 		m->i++;
 	}
 	return (1);
@@ -117,12 +112,12 @@ int	init_params(t_main *m, int ac, char **av)
 		ft_error(ERR_DIGITS);
 		return (0);
 	}
-	if (!main_alloc(m, av))
+	if (!main_alloc(m, ac, av))
 	{
 		ft_error(ERR_ALLOC);
 		return (0);
 	}
-	if (!philos_alloc(m, ac, av))
+	if (!philos_alloc(m, av))
 	{
 		ft_error(ERR_PHILOS);
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 14:41:33 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 16:52:56 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,7 @@ typedef struct s_philos
 	int				philo_id;
 	int				r_fork;
 	int				l_fork;
-	int				n_eats;	
 	int				eat_counter;
-	int				food_limit;
 	int				err;
 	unsigned int	time2_die;
 	unsigned int	time2_eat;
@@ -98,9 +96,9 @@ typedef struct s_main
 	int				i;
 	int				j;
 	int				philo_nb;
-	int				ghost;
+	int				ghost;	
+	int				n_eats;
 	int				done_eating;
-	int				*platter;
 	int				*err;
 	long			data;
 	unsigned int	death_sentence;

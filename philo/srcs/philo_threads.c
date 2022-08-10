@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 18:08:16 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:19:44 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	philosophers_init(t_main *m)
 
 int	food_stock(t_main *m)
 {
-	if (!read_data(&m->mt.satiated, &m->p[m->i].eat_counter))
+	if (read_data(&m->mt.satiated, &m->p[m->i].eat_counter) == 0)
 		m->done_eating += 1;
 	if (m->done_eating != m->philo_nb)
 		return (1);
@@ -46,12 +46,17 @@ int	ecg(t_main *m)
 	while (m->i < m->philo_nb)
 	{
 		if (m->stock_limit && !food_stock(m))
+		{
+			write_data(&m->mt.reaper, &m->ghost, m->i + 1, 0);
 			break ;
+		}
 		if (chrono(&m->mt.chrono, m->bigbang)
 			> read_udata(&m->mt.time[m->i], &m->p[m->i].expected_death))
 		{
 			write_data(&m->mt.reaper, &m->ghost, m->i + 1, 0);
-			print_action(&m->p[m->i], DEAD);
+			pthread_mutex_lock(&m->mt.display);
+			printf(DEAD, chrono(&m->mt.chrono, m->bigbang), m->i + 1);
+			pthread_mutex_unlock(&m->mt.display);
 			break ;
 		}
 		m->i++;

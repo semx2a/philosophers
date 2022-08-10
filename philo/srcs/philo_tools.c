@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 16:39:44 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:17:48 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ unsigned int	chrono(pthread_mutex_t *m, struct timeval bigbang)
 int	print_action(t_philos *p, char *str)
 {	
 	p->timestamp = chrono(&p->m->mt.chrono, p->m->bigbang);
-	if (!read_data(&p->m->mt.reaper, &p->m->ghost)
-		|| read_data(&p->m->mt.reaper, &p->m->ghost) == p->philo_id)
+	if (!read_data(&p->m->mt.reaper, &p->m->ghost))
 	{
 		pthread_mutex_lock(&p->m->mt.display);
 		printf(str, p->timestamp, p->philo_id);

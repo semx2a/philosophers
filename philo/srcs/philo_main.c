@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 22:14:14 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 14:46:18 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	ft_flush(t_main *m)
 	pthread_mutex_destroy(&m->mt.satiated);
 	pthread_mutex_destroy(&m->mt.display);
 	pthread_mutex_destroy(&m->mt.reaper);
+	pthread_mutex_destroy(&m->mt.chrono);
 	free(m->mt.waiter);
 	free(m->p);
 	free(m->philosophers);

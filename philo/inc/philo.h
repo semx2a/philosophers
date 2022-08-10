@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 23:03:07 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 14:41:33 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,11 @@
 typedef struct s_mutex
 {
 	pthread_mutex_t	*waiter;
+	pthread_mutex_t	*time;
 	pthread_mutex_t	display;
 	pthread_mutex_t	satiated;
 	pthread_mutex_t	reaper;
-	pthread_mutex_t	*time;
+	pthread_mutex_t	chrono;
 }	t_mutex;
 
 typedef struct s_philos
@@ -134,7 +135,7 @@ void			write_udata(pthread_mutex_t *mu, unsigned int *data,
 					unsigned int value,	char instruction);
 
 //		philo_tools.c
-unsigned int	chrono(struct timeval bigbang);
+unsigned int	chrono(pthread_mutex_t *m, struct timeval bigbang);
 int				print_action(t_philos *p, char *str);
 
 //		philo_utils.c

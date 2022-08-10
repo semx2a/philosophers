@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 23:09:21 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 15:14:21 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,34 @@ int	eat(t_philos *p)
 	return (1);
 }
 
+//int	eat(t_philos *p)
+//{
+//	int ret;
+//
+//	ret = 1;
+//
+//	pthread_mutex_lock(&p->m->mt.waiter[p->l_fork]);
+//	ret = print_action(p, FORK);
+//	pthread_mutex_lock(&p->m->mt.waiter[p->r_fork]);
+//	ret = print_action(p, FORK);
+//	ret = print_action(p, EATING);
+//	write_udata(&p->m->mt.time[p->philo_id - 1], &p->expected_death,
+//		p->timestamp + p->time2_die, 0);
+//	ret = mr_sandman(p, p->time2_eat);
+//	pthread_mutex_lock(&p->m->mt.waiter[p->l_fork]);
+//	pthread_mutex_lock(&p->m->mt.waiter[p->r_fork]);
+//	return (ret);
+//}
+
 void	*routine(void *p_data)
 {
 	t_philos	*p;
 
 	p = (t_philos *)p_data;
-	p->timestamp = chrono(p->m->bigbang);
+//	printf("%d :: l_fork #%d	r_fork #%d\n", p->philo_id, p->l_fork, p->r_fork);
+	if (p->philo_id % 2 == 0)
+		mr_sandman(p, p->offset);
+	p->timestamp = chrono(&p->m->mt.chrono, p->m->bigbang);
 	write_udata(&p->m->mt.time[p->philo_id - 1], &p->expected_death,
 		p->timestamp + p->time2_die, 0);
 	while (1)
@@ -73,7 +95,6 @@ void	*routine(void *p_data)
 		}
 		if (!print_action(p, THINKING))
 			break ;
-		usleep(10);
 	}
 	return (NULL);
 }

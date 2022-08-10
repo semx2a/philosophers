@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 23:27:09 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 15:12:11 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,13 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		m->p[m->i] = (t_philos){0};
 		m->p[m->i].philo_id = m->i + 1;
 		m->p[m->i].l_fork = m->i;
-		m->p[m->i].r_fork = m->i + 1;
-		if (m->i == m->philo_nb - 1)
-			m->p[m->i].r_fork = 0;
+		m->p[m->i].r_fork = (m->i + 1) % m->philo_nb;
 		m->p[m->i].time2_die = (unsigned)ft_atoli(av[2]);
 		m->p[m->i].expected_death = m->p[m->i].time2_die;
 		m->p[m->i].time2_eat = (unsigned)ft_atoli(av[3]);
 		m->p[m->i].time2_sleep = (unsigned)ft_atoli(av[4]);
 		m->p[m->i].offset = m->p[m->i].time2_sleep / (unsigned int)m->philo_nb;
+		m->p[m->i].m = m;
 		if (ac == 6)
 		{
 			m->p[m->i].n_eats = (int)ft_atoli(av[5]);
@@ -78,7 +77,6 @@ int	philos_alloc(t_main *m, int ac, char **av)
 				return (0);
 			m->p[m->i].food_limit = 1;
 		}
-		m->p[m->i].m = m;
 		m->i++;
 	}
 	return (1);
@@ -106,6 +104,8 @@ int	mutex_init(t_main *m)
 	if (pthread_mutex_init(&m->mt.satiated, NULL) != 0)
 		return (0);
 	if (pthread_mutex_init(&m->mt.reaper, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&m->mt.chrono, NULL) != 0)
 		return (0);
 	return (1);
 }

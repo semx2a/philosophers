@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 23:05:18 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 15:12:51 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	philosophers_init(t_main *m)
 			ft_error(ERR_THREAD);
 			return (0);
 		}
-		usleep(10);
 		m->i++;
 	}
 	return (1);
@@ -38,7 +37,7 @@ int	ecg(t_main *m)
 		m->i = 0;
 		while (m->ghost == 0 && m->i < m->philo_nb)
 		{
-			m->death_sentence = chrono(m->bigbang);
+			m->death_sentence = chrono(&m->mt.chrono, m->bigbang);
 			if (m->death_sentence
 				> read_udata(&m->mt.time[m->i], &m->p[m->i].expected_death))
 			{

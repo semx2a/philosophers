@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 18:22:48 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:33:51 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ void	*routine(void *p_data)
 	p = (t_philos *)p_data;
 //	printf("%d :: l_fork #%d	r_fork #%d\n", p->philo_id, p->l_fork, p->r_fork);
 	if (p->philo_id % 2 == 0)
-		if (!mr_sandman(p, p->offset))
-			return (0);
+		usleep(10000);
 	p->timestamp = chrono(&p->m->mt.chrono, p->m->bigbang);
 	write_udata(&p->m->mt.time[p->philo_id - 1], &p->expected_death,
 		p->timestamp + p->time2_die, 0);

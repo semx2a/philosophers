@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 18:09:40 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:33:42 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,14 @@ int	mr_sandman(t_philos *p, unsigned int time)
 {
 	unsigned int	countdown;
 
-	countdown = time * 1000;
-	while (countdown)
+	countdown = chrono(&p->m->mt.chrono, p->m->bigbang);
+	while (1)
 	{
 		if (read_data(&p->m->mt.reaper, &p->m->ghost))
 			return (0);
-		usleep(50000);
-		countdown -= 50000;
-		if (countdown < 50000)
-		{
-			usleep(countdown);
+		if (chrono(&p->m->mt.chrono, p->m->bigbang) - countdown >= time)
 			break ;
-		}
+		usleep(50);
 	}
 	return (1);
 }

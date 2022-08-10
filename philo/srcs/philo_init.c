@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 18:04:26 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:54:57 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,13 @@ int	main_alloc(t_main *m, int ac, char **av)
 	if (!m->p)
 		return (0);
 	if (ac == 6)
+	{
 		m->stock_limit = 1;
+		m->done_eating = (int *)malloc(sizeof(int)
+				* (long unsigned int)m->philo_nb);
+		if (!m->done_eating)
+			return (0);
+	}
 	return (1);
 }
 

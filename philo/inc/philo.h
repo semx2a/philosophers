@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 18:08:58 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 19:00:29 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,9 @@ typedef struct s_main
 	int				philo_nb;
 	int				ghost;	
 	int				stock_limit;
-	int				done_eating;
+	int				*done_eating;
 	int				*err;
+	int				end_of_service;
 	long			data;
 	pthread_t		*philosophers;
 	struct timeval	bigbang;

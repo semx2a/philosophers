@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 14:46:18 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:47:07 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 #include "../inc/philo.h"
 
-void	ft_flush(t_main *m)
+void	ft_flush(t_main *m, int ac)
 {
 	m->i = 0;
 	while (m->i < m->philo_nb)
@@ -40,6 +40,8 @@ void	ft_flush(t_main *m)
 	free(m->p);
 	free(m->philosophers);
 	free(m->err);
+	if (ac == 6)
+		free(m->done_eating);
 }
 
 int	main(int ac, char **av)
@@ -61,6 +63,6 @@ int	main(int ac, char **av)
 		if (!philosophers_join(&m))
 			ft_error(ERR);
 	}
-	ft_flush(&m);
+	ft_flush(&m, ac);
 	return (0);
 }

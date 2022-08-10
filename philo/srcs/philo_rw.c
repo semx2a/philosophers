@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 22:54:46 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/09 23:03:13 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 17:52:44 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	read_data(pthread_mutex_t *mu, int *data)
 void	write_data(pthread_mutex_t *mu, int *data, int value, char instruction)
 {
 	pthread_mutex_lock(mu);
-	if (instruction == '+')
+	if (instruction == '-')
 		*(data) += value;
 	else
 		*(data) = value;
@@ -46,7 +46,7 @@ void	write_udata(pthread_mutex_t *mu, unsigned int *data, unsigned int value,
 			char instruction)
 {
 	pthread_mutex_lock(mu);
-	if (instruction == '+')
+	if (instruction == '-')
 		*(data) += value;
 	else
 		*(data) = value;

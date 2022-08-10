@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 17:10:10 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 17:53:17 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	eat(t_philos *p)
 		return (0);
 	}
 	waiter(p, 0);
-	write_data(&p->m->mt.satiated, &p->eat_counter, 1, '+');
+	write_data(&p->m->mt.satiated, &p->eat_counter, 1, '-');
 	return (1);
 }
 

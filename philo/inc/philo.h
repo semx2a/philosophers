@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 16:52:56 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 17:55:13 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ typedef struct s_main
 	int				j;
 	int				philo_nb;
 	int				ghost;	
-	int				n_eats;
+	int				stock_limit;
 	int				done_eating;
 	int				*err;
 	long			data;

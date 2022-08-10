@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 16:55:23 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 17:56:43 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int	main_alloc(t_main *m, int ac, char **av)
 	if (!m->p)
 		return (0);
 	if (ac == 6)
-		m->n_eats = (int)ft_atoli(av[5]);
+		m->stock_limit = 1;
 	return (1);
 }
 
-int	philos_alloc(t_main *m, char **av)
+int	philos_alloc(t_main *m, int ac, char **av)
 {	
 	m->i = 0;
 	while (m->i < m->philo_nb)
@@ -72,6 +72,8 @@ int	philos_alloc(t_main *m, char **av)
 		m->p[m->i].time2_sleep = (unsigned)ft_atoli(av[4]);
 		m->p[m->i].offset = m->p[m->i].time2_sleep / (unsigned int)m->philo_nb;
 		m->p[m->i].m = m;
+		if (ac == 6)
+			m->p[m->i].eat_counter = (int)ft_atoli(av[5]);
 		m->i++;
 	}
 	return (1);
@@ -117,7 +119,7 @@ int	init_params(t_main *m, int ac, char **av)
 		ft_error(ERR_ALLOC);
 		return (0);
 	}
-	if (!philos_alloc(m, av))
+	if (!philos_alloc(m, ac, av))
 	{
 		ft_error(ERR_PHILOS);
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 17:56:54 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:08:16 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ int	ecg(t_main *m)
 	{
 		if (m->stock_limit && !food_stock(m))
 			break ;
-		m->death_sentence = chrono(&m->mt.chrono, m->bigbang);
-		if (m->death_sentence
+		if (chrono(&m->mt.chrono, m->bigbang)
 			> read_udata(&m->mt.time[m->i], &m->p[m->i].expected_death))
 		{
 			write_data(&m->mt.reaper, &m->ghost, m->i + 1, 0);

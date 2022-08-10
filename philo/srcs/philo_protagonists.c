@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/10 17:09:34 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/10 18:09:40 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	mr_sandman(t_philos *p, unsigned int time)
 {
 	unsigned int	countdown;
 
-	countdown = time;
+	countdown = time * 1000;
 	while (countdown)
 	{
 		if (read_data(&p->m->mt.reaper, &p->m->ghost))

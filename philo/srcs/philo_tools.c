@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:05:20 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 18:09:45 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/11 19:13:32 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ unsigned int	chrono(void)
 
 int	print_action(t_philos *p, char *str)
 {	
-	if (!read_data(&p->m->mt.display, &p->m->stop))
+	pthread_mutex_lock(&p->m->mt.display);
+	if (!p->m->stop)
 	{
 		p->timestamp = chrono() - p->birth;
-		pthread_mutex_lock(&p->m->mt.display);
 		printf(str, p->timestamp, p->philo_id);
 		pthread_mutex_unlock(&p->m->mt.display);
 		return (1);
 	}
+	pthread_mutex_unlock(&p->m->mt.display);
 	return (0);
 }

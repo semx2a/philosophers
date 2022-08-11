@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:34 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/06 23:39:33 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/11 15:57:39 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ size_t	ft_strlen(const char *str)
 	return (len);
 }
 
-void	ft_error(char *str)
+int	ft_error(char *str)
 {
 	write(2, str, ft_strlen(str));
+	return (0);
 }

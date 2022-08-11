@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 19:19:07 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/11 19:51:49 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ int	check_params(t_main *m, int ac, char **av)
 			m->j++;
 		}
 		m->data = ft_atoli(av[m->i]);
+		if (m->i == 1)
+			if (m->data > MAX_THREADS)
+				m->ret = ft_error(ERR_ALLOC);
 		if (m->data < INT_MIN || m->data > INT_MAX || m->data == 0)
 			m->ret = ft_error(ERR_VAL);
 		m->i++;
@@ -36,8 +39,6 @@ int	check_params(t_main *m, int ac, char **av)
 int	main_alloc(t_main *m, int ac, char **av)
 {	
 	m->philo_nb = (int)ft_atoli(av[1]);
-	if (m->philo_nb > MAX_THREADS)
-		return (0);
 	m->philosophers = (pthread_t *)malloc(sizeof(pthread_t)
 			* (long unsigned)m->philo_nb);
 	if (!m->philosophers)

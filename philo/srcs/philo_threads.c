@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 18:14:06 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/12 14:48:39 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	philosophers_init(t_main *m)
 	while (m->i < m->philo_nb)
 	{		
 		m->bigbang[m->i] = chrono();
+		m->expected_death[m->i] = m->bigbang[m->i] + m->p[m->i].time2_die;
 		m->p[m->i].birth = m->bigbang[m->i];
 		m->err[m->i] = pthread_create(&m->philosophers[m->i], NULL,
 				&routine, &m->p[m->i]);
@@ -42,7 +43,7 @@ int	ecg(t_main *m)
 			break ;
 		}
 		if ((chrono() - m->bigbang[m->i])
-			> read_udata(&m->mt.time[m->i], &m->p[m->i].expected_death))
+			> read_udata(&m->mt.time, &m->expected_death[m->i]))
 		{
 			write_data(&m->mt.display, &m->stop, 1, 0);
 			pthread_mutex_lock(&m->mt.display);

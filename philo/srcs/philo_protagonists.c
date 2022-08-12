@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 18:18:35 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/12 14:31:03 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ int	waiter(t_philos *p, int val)
 	if (val == 1)
 	{
 		p->err = platter(p, &pthread_mutex_lock, FORK);
-		if (p->err == -2 || p->err == -1 || p->err == 0)
+		if (p->err != 1)
 		{
-			if (p->err == -1 || p->err == -2)
+			if (p->err != 0)
 				platter(p, &pthread_mutex_unlock, NULL);
 			return (0);
 		}

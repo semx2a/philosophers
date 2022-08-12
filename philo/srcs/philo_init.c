@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 19:51:49 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/12 14:44:48 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ int	check_params(t_main *m, int ac, char **av)
 		}
 		m->data = ft_atoli(av[m->i]);
 		if (m->i == 1)
-			if (m->data > MAX_THREADS)
+		{
+			if (m->data > MAX_THREADS || m->data == 0)
 				m->ret = ft_error(ERR_ALLOC);
-		if (m->data < INT_MIN || m->data > INT_MAX || m->data == 0)
+		}
+		else if (m->data < INT_MIN || m->data > INT_MAX || m->data == 0)
 			m->ret = ft_error(ERR_VAL);
 		m->i++;
 	}
@@ -49,6 +51,10 @@ int	main_alloc(t_main *m, int ac, char **av)
 	m->bigbang = (unsigned int *)malloc(sizeof(unsigned int)
 			* (long unsigned)m->philo_nb);
 	if (!m->bigbang)
+		return (0);
+	m->expected_death = (unsigned int *)malloc(sizeof(unsigned int)
+			* (long unsigned)m->philo_nb);
+	if (!m->expected_death)
 		return (0);
 	if (ac == 6)
 	{
@@ -73,7 +79,6 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		m->p[m->i].time2_die = (unsigned)ft_atoli(av[2]);
 		m->p[m->i].time2_eat = (unsigned)ft_atoli(av[3]);
 		m->p[m->i].time2_sleep = (unsigned)ft_atoli(av[4]);
-		m->p[m->i].expected_death = m->p[m->i].time2_die;
 		m->p[m->i].m = m;
 		if (ac == 6)
 			m->p[m->i].eat_counter = (int)ft_atoli(av[5]);
@@ -87,18 +92,15 @@ int	mutex_init(t_main *m)
 	m->mt.waiter = malloc(sizeof(pthread_mutex_t) * (long unsigned)m->philo_nb);
 	if (!m->mt.waiter)
 		return (0);
-	m->mt.time = malloc(sizeof(pthread_mutex_t) * (long unsigned)m->philo_nb);
-	if (!m->mt.time)
-		return (0);
 	m->i = 0;
 	while (m->i < m->philo_nb)
 	{
 		if (pthread_mutex_init(&m->mt.waiter[m->i], NULL) != 0)
 			return (0);
-		if (pthread_mutex_init(&m->mt.time[m->i], NULL) != 0)
-			return (0);
 		m->i++;
 	}
+	if (pthread_mutex_init(&m->mt.time, NULL) != 0)
+		return (0);
 	if (pthread_mutex_init(&m->mt.display, NULL) != 0)
 		return (0);
 	return (1);

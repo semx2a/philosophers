@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 18:09:15 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/12 14:46:03 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@
 typedef struct s_mutex
 {
 	pthread_mutex_t	*waiter;
-	pthread_mutex_t	*time;
+	pthread_mutex_t	time;
 	pthread_mutex_t	display;
 }	t_mutex;
 
@@ -83,7 +83,6 @@ typedef struct s_philos
 	unsigned int	time2_die;
 	unsigned int	time2_eat;
 	unsigned int	time2_sleep;
-	unsigned int	expected_death;
 	unsigned int	timestamp;
 	struct s_main	*m;
 }	t_philos;
@@ -100,6 +99,7 @@ typedef struct s_main
 	int				ret;
 	long			data;
 	unsigned int	*bigbang;
+	unsigned int	*expected_death;
 	pthread_t		*philosophers;
 	t_philos		*p;
 	t_mutex			mt;

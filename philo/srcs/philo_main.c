@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 18:10:34 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/12 14:54:20 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ void	ft_flush(t_main *m)
 	while (m->i < m->philo_nb)
 	{
 		pthread_mutex_destroy(&m->mt.waiter[m->i]);
-		pthread_mutex_destroy(&m->mt.time[m->i]);
 		m->i++;
 	}
+	pthread_mutex_destroy(&m->mt.time);
 	pthread_mutex_destroy(&m->mt.display);
+	free(m->expected_death);
 	free(m->bigbang);
 	free(m->mt.waiter);
 	free(m->p);

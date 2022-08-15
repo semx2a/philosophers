@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 17:24:36 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/12 14:54:20 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/15 19:11:59 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	ft_flush(t_main *m)
 	free(m->p);
 	free(m->philosophers);
 	free(m->err);
+	free(m->platter);
 }
 
 int	main(int ac, char **av)

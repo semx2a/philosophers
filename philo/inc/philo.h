@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/12 14:46:03 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/15 21:00:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct s_philos
 	int				r_fork;
 	int				l_fork;
 	int				eat_counter;
-	int				err;
+	int				ret;
 	unsigned int	birth;
 	unsigned int	time2_die;
 	unsigned int	time2_eat;
@@ -96,6 +96,7 @@ typedef struct s_main
 	int				stock_limit;
 	int				done_eating;
 	int				*err;
+	int				*platter;
 	int				ret;
 	long			data;
 	unsigned int	*bigbang;
@@ -119,7 +120,9 @@ int				ecg(t_main *m);
 //		philo_protagonists.c
 //int				stop_buster(t_philos *p);
 int				mr_sandman(t_philos *p, unsigned int time);
-int				waiter(t_philos *p, int val);
+int				waiter(t_philos *p, int action);
+int				platter(t_philos *p, int action);
+
 
 //		philo_rw.c
 int				read_data(pthread_mutex_t *mu, int *data);

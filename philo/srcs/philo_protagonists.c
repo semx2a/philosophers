@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/12 14:31:03 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/15 23:59:58 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,60 +26,49 @@ int	mr_sandman(t_philos *p, unsigned int time)
 	return (0);
 }
 
-int	service(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int fork)
+int	service(t_philos *p, int fork, int action)
 {
-	f(&p->m->mt.waiter[fork]);
-	if (str != NULL)
-		if (!print_action(p, str))
+	if (action == 1 && !read_data(&p->m->mt.waiter[fork], &p->m->platter[fork]))
+	{
+		write_data(&p->m->mt.waiter[fork], &p->m->platter[fork], action, 0);
+		if (!print_action(p, FORK))
 			return (0);
-	if (p->l_fork == p->r_fork)
-		return (-2);
-	return (1);
-}
-
-int	inspect_platter(t_philos *p, int (*f)(pthread_mutex_t *), char *str, int f1,
-			int f2)
-{
-	if (!service(p, f, str, f1))
-	{
-		pthread_mutex_unlock(&p->m->mt.waiter[f1]);
-		return (0);
+		return (1);
 	}
-	if (!service(p, f, str, f2))
-		return (-1);
-	return (1);
+	else if (action == 0
+		&& read_data(&p->m->mt.waiter[fork], &p->m->platter[fork]))
+	{
+		write_data(&p->m->mt.waiter[fork], &p->m->platter[fork], action, 0);
+		return (1);
+	}
+	return (0);
 }
 
-int	platter(t_philos *p, int (*f)(pthread_mutex_t *), char *str)
+int	platter(t_philos *p, int action)
 {
-	int	ret;
-
-	ret = 0;
 	if (p->l_fork < p->r_fork)
-		ret = inspect_platter(p, f, str, p->l_fork, p->r_fork);
-	else if (p->l_fork > p->r_fork)
-		ret = inspect_platter(p, f, str, p->r_fork, p->l_fork);
-	else
 	{
-		ret = service(p, f, str, p->l_fork);
-		mr_sandman(p, p->time2_die);
-	}
-	return (ret);
-}
-
-int	waiter(t_philos *p, int val)
-{
-	if (val == 1)
-	{
-		p->err = platter(p, &pthread_mutex_lock, FORK);
-		if (p->err != 1)
+		if (!service(p, p->l_fork, action))
 		{
-			if (p->err != 0)
-				platter(p, &pthread_mutex_unlock, NULL);
+			service(p, p->l_fork, 0);
 			return (0);
 		}
+		service(p, p->r_fork, action);
 	}
-	else if (!val)
-		platter(p, &pthread_mutex_unlock, NULL);
+	else if (p->l_fork > p->r_fork)
+	{
+		if (!service(p, p->r_fork, action))
+		{
+			service(p, p->r_fork, 0);
+			return (0);
+		}
+		service(p, p->l_fork, action);
+	}
+	else
+	{
+		service(p, p->l_fork, action);
+		mr_sandman(p, p->time2_die);
+		return (0);
+	}
 	return (1);
 }

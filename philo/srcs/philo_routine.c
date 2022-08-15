@@ -6,42 +6,25 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/12 14:48:24 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/15 23:57:22 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	p_sleep(t_philos *p)
-{	
-	if (!print_action(p, SLEEPING))
-		return (0);
-	if (!mr_sandman(p, p->time2_sleep))
-		return (0);
-	return (1);
-}
-
 int	eat(t_philos *p)
 {
-	if (!waiter(p, 1))
-		return (0);
-	if (!print_action(p, EATING))
-	{	
-		waiter(p, 0);
-		return (0);
-	}
-	write_udata(&p->m->mt.time, &p->m->expected_death[p->philo_id - 1],
-		p->timestamp + p->time2_die);
-	if (!mr_sandman(p, p->time2_eat))
-	{	
-		waiter(p, 0);
-		return (0);
-	}
-	waiter(p, 0);
-	if (p->eat_counter)
+	if (platter(p, 1))
 	{
-		p->eat_counter -= 1;
-		if (!p->eat_counter)
+		if (!print_action(p, EATING))
+			return (0);
+		write_udata(&p->m->mt.time, &p->m->expected_death[p->philo_id - 1],
+			p->timestamp + p->time2_die);
+		mr_sandman(p, p->time2_eat);
+		platter(p, 0);
+		if (p->eat_counter)
+			p->eat_counter -= 1;
+		else
 			write_data(&p->m->mt.display, &p->m->done_eating, 1, '-');
 	}
 	return (1);
@@ -59,10 +42,11 @@ void	*routine(void *p_data)
 		if (!eat(p))
 			break ;
 		else
-			if (!p_sleep(p))
-				return (NULL);
-		if (!print_action(p, THINKING))
-			break ;
+		{
+			print_action(p, SLEEPING);
+			mr_sandman(p, p->time2_sleep);
+		}
+		print_action(p, THINKING);
 	}
 	return (NULL);
 }

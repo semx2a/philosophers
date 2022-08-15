@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/12 14:44:48 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/15 19:13:30 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ int	main_alloc(t_main *m, int ac, char **av)
 	m->err = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
 	if (!m->err)
 		return (0);
+	m->platter = (int *)malloc(sizeof(int) * (long unsigned)m->philo_nb);
+	if (!m->platter)
+		return (0);
 	m->bigbang = (unsigned int *)malloc(sizeof(unsigned int)
 			* (long unsigned)m->philo_nb);
 	if (!m->bigbang)
@@ -66,6 +69,7 @@ int	main_alloc(t_main *m, int ac, char **av)
 
 int	philos_alloc(t_main *m, int ac, char **av)
 {	
+	memset(m->platter, 0, m->philo_nb);
 	m->p = (t_philos *)malloc(sizeof(t_philos) * (long unsigned)m->philo_nb);
 	if (!m->p)
 		return (0);

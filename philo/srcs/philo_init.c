@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/12 14:44:48 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/16 17:43:30 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	check_params(t_main *m, int ac, char **av)
 		while (av[m->i][m->j])
 		{
 			if (!ft_isdigit(av[m->i][m->j]))
+			{
 				m->ret = ft_error(ERR_DIGITS);
+				return (0);
+			}
 			m->j++;
 		}
 		m->data = ft_atoli(av[m->i]);

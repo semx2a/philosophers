@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 22:55:00 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/15 23:57:22 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/16 17:39:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,18 @@ int	eat(t_philos *p)
 		mr_sandman(p, p->time2_eat);
 		platter(p, 0);
 		if (p->eat_counter)
+		{
 			p->eat_counter -= 1;
-		else
-			write_data(&p->m->mt.display, &p->m->done_eating, 1, '-');
+			if (!p->eat_counter)
+				write_data(&p->m->mt.display, &p->m->done_eating, 1, '-');
+		}
+		print_action(p, SLEEPING);
+		mr_sandman(p, p->time2_sleep);
+	}
+	else
+	{
+		print_action(p, THINKING);
+		mr_sandman(p, p->time2_think);
 	}
 	return (1);
 }
@@ -38,15 +47,7 @@ void	*routine(void *p_data)
 	if (p->philo_id % 2 == 0)
 		usleep(10000);
 	while (!read_data(&p->m->mt.display, &p->m->stop))
-	{
 		if (!eat(p))
 			break ;
-		else
-		{
-			print_action(p, SLEEPING);
-			mr_sandman(p, p->time2_sleep);
-		}
-		print_action(p, THINKING);
-	}
 	return (NULL);
 }

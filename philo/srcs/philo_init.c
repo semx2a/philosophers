@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 17:38:07 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/15 19:13:30 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/16 17:00:48 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	main_alloc(t_main *m, int ac, char **av)
 
 int	philos_alloc(t_main *m, int ac, char **av)
 {	
-	memset(m->platter, 0, m->philo_nb);
+	memset(m->platter, 0, (long unsigned)m->philo_nb);
 	m->p = (t_philos *)malloc(sizeof(t_philos) * (long unsigned)m->philo_nb);
 	if (!m->p)
 		return (0);
@@ -83,6 +83,7 @@ int	philos_alloc(t_main *m, int ac, char **av)
 		m->p[m->i].time2_die = (unsigned)ft_atoli(av[2]);
 		m->p[m->i].time2_eat = (unsigned)ft_atoli(av[3]);
 		m->p[m->i].time2_sleep = (unsigned)ft_atoli(av[4]);
+		m->p[m->i].time2_think = m->p[m->i].time2_eat;
 		m->p[m->i].m = m;
 		if (ac == 6)
 			m->p[m->i].eat_counter = (int)ft_atoli(av[5]);

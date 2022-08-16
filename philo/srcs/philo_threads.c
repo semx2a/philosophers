@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 16:30:33 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/12 14:48:39 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/16 15:32:16 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	philosophers_init(t_main *m)
 	while (m->i < m->philo_nb)
 	{		
 		m->bigbang[m->i] = chrono();
-		m->expected_death[m->i] = m->bigbang[m->i] + m->p[m->i].time2_die;
 		m->p[m->i].birth = m->bigbang[m->i];
+		m->expected_death[m->i] = (chrono() - m->bigbang[m->i])
+			+ m->p[m->i].time2_die;
 		m->err[m->i] = pthread_create(&m->philosophers[m->i], NULL,
 				&routine, &m->p[m->i]);
 		if (m->err[m->i] != 0)

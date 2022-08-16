@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 19:14:19 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/15 21:00:34 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/16 15:57:58 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_philos
 	unsigned int	time2_die;
 	unsigned int	time2_eat;
 	unsigned int	time2_sleep;
+	unsigned int	time2_think;
 	unsigned int	timestamp;
 	struct s_main	*m;
 }	t_philos;

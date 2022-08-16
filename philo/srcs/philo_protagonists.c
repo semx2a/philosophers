@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 15:49:13 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/15 23:59:58 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/08/16 17:39:19 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,31 @@ int	service(t_philos *p, int fork, int action)
 	return (0);
 }
 
+int	inspect_platter(t_philos *p, int action, int f1, int f2)
+{
+	if (!service(p, f1, action))
+		return (0);
+	if (!service(p, f2, action))
+		return (0);
+	return (1);
+}
+
 int	platter(t_philos *p, int action)
 {
 	if (p->l_fork < p->r_fork)
 	{
-		if (!service(p, p->l_fork, action))
-		{
-			service(p, p->l_fork, 0);
+		if (!inspect_platter(p, action, p->l_fork, p->r_fork))
 			return (0);
-		}
-		service(p, p->r_fork, action);
 	}
 	else if (p->l_fork > p->r_fork)
 	{
-		if (!service(p, p->r_fork, action))
-		{
-			service(p, p->r_fork, 0);
+		if (!inspect_platter(p, action, p->r_fork, p->l_fork))
 			return (0);
-		}
-		service(p, p->l_fork, action);
 	}
 	else
 	{
 		service(p, p->l_fork, action);
-		mr_sandman(p, p->time2_die);
+		mr_sandman(p, p->birth + p->time2_die);
 		return (0);
 	}
 	return (1);

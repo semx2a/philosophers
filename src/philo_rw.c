@@ -6,11 +6,11 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 22:54:46 by seozcan           #+#    #+#             */
-/*   Updated: 2022/08/11 17:54:41 by seozcan          ###   ########.fr       */
+/*   Updated: 2024/02/05 22:35:57 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philo.h"
+#include "philo.h"
 
 int	read_data(pthread_mutex_t *mu, int *data)
 {

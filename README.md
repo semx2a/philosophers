@@ -38,10 +38,10 @@ The first number is the timestamp, the second number is the philosopher's ID, an
 
 The project has been tested with the following test cases:
 
-- **Basic Test:** 5 800 200 200 - No philosophers should die.
-- **Basic Test:** 4 410 200 200 - No philosophers should die.
-- **Basic Test:** 5 800 200 200 7 - No philosophers should die, and the simulation should stop when all philosophers have eaten 7 times.
+- 5 800 200 200 - No philosophers should die.
+- 4 410 200 200 - No philosophers should die.
+- 5 800 200 200 7 - No philosophers should die, and the simulation should stop when all philosophers have eaten 7 times.
 
-- **Basic Test:** 1 800 200 200 - The philosopher should not eat and die.
-- **Basic Test:** 4 310 200 100 - A philosophers should die.
-- **Basic Test:** 2 60 60 60 - No philosophers should die.
+- 1 800 200 200 - The philosopher should not eat and die.
+- 4 310 200 100 - A philosophers should die.
+- 2 60 60 60 - No philosophers should die.

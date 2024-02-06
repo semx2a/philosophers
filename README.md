@@ -1,4 +1,4 @@
-# Project: Philosophers
+# Philosophers
 
 ## Overview
 

@@ -20,7 +20,11 @@ SRC		=	$Sphilo_init.c \
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COMPILERS::
 
-CC		=	clang
+CC		=	gcc
+
+ifneq ($(UNAME), Darwin)
+CC	=	clang
+endif
 
 CFLAGS	=	-Wall -Wextra -Werror
 
